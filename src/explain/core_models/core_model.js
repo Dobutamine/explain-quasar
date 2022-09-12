@@ -1,11 +1,15 @@
 export class CoreModel {
-  model;
-  is_enabled;
+  model = {};
+  name = "";
+  description = "";
+  is_enabled = false;
   is_initialized = false;
 
   constructor(args, model_ref) {
+    // store a reference to the model object
     this.model = model_ref;
-    // set all the args
+
+    // process the arguments/parameters
     args.forEach((arg) => {
       this[arg["key"]] = arg["value"];
     });
@@ -13,13 +17,20 @@ export class CoreModel {
 
   modelStep() {
     if (this.is_initialized) {
-      this.calcStep();
+      if (this.is_enabled) {
+        this.calcModel();
+      }
     } else {
       this.initModel();
     }
   }
 
-  initModel() {}
+  initModel() {
+    // if no specific initialization is necessary this routine is called only once
+    // override it in the child class if you want to do a model specific initialization
+    this.is_initialized = true;
+  }
 
+  // this method is called during every model step when the initialization is complete and the model is enabled
   calcModel() {}
 }

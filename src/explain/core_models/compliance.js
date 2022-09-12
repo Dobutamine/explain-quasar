@@ -1,29 +1,23 @@
 import { CoreModel } from "./core_model";
 
-export class TimeVaryingElastance extends CoreModel {
-  // define the for this class specific parameters
+export class Compliance extends CoreModel {
+  // define the for this model specific parameters
   u_vol = 0;
   u_vol_fac = 1.0;
-  el_min = 0;
-  el_min_fac = 1.0;
-  el_max = 0;
-  el_max_fac = 1.0;
+  el_base = 0;
+  el_base_fac = 1.0;
   el_k = 0;
   el_k_fac = 1.0;
 
   // define the state variables
   pres = 0;
   pres_recoil = 0;
-  pres_transmural = 0;
   pres_outside = 0;
-  pres_atm = 0;
-  pres_itp = 0;
   pres_max = 0;
   pres_min = 0;
   vol = 0;
   vol_max = 0;
   vol_min = 0;
-  varying_elastance_factor = 0;
   el = 0;
 
   // define some local variables
@@ -51,25 +45,18 @@ export class TimeVaryingElastance extends CoreModel {
     let vol_above_u = this.vol - this.u_vol * this.u_vol_fac;
 
     // calculate the elastance, which is volume dependent in a non-linear way
-    let el_min = this.el_min * this.el_min_fac;
-    let el_max = this.el_max * this.el_max_fac;
     this.el =
-      el_min +
-      (el_max - el_min) * this.varying_elastance_factor +
+      this.el_base * this.el_base_fac +
       this.el_k * this.el_k_fac * Math.pow(vol_above_u, 2);
 
     // calculate the recoil pressure in the compliance due to the elastacity of the compliance
     this.pres_recoil = vol_above_u * this.el;
 
     // calculate the pressure which refers to the pressure inside relative to the outside of a compartment.
-    this.pres =
-      this.pres_recoil + this.pres_outside + this.pres_itp + this.pres_atm;
+    this.pres = this.pres_recoil + this.pres_outside;
 
     //reset the outside pressure as it needs to be set every model cycle
     this.pres_outside = 0;
-
-    //reset the intrathoracic pressure as it needs to be set every model cycle nu the itp model
-    this.pres_itp = 0;
 
     // calculate the minimal and maximal pressure and volume
     this.calcMinMax();
@@ -124,6 +111,7 @@ export class TimeVaryingElastance extends CoreModel {
       _temp_vol_min = 1000;
       this._update_counter = 0;
     }
+
     // find min and max pressures
     if (this.pres > this._temp_pres_max) {
       this._temp_pres_max = this.pres;

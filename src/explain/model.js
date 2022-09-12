@@ -14,11 +14,47 @@ export default class Model {
     // setup the communication channel with the worker thread
     this.setUpCommChannel();
 
-    // load the default model into memory
-    this.importDefaultModel();
+    this.injectDefaultModelDefinition();
   }
 
-  importDefaultModel() {
+  newModel(name, description, weight, modeling_stepsize) {
+    this.sendMessage({
+      type: "command",
+      message: "new",
+      payload: [
+        {
+          name: name,
+          description: description,
+          weight: weight,
+          model_time_total: 0.0,
+          modeling_stepsize: modeling_stepsize,
+          components: {},
+        },
+      ],
+    });
+  }
+
+  addComponentToModel(component) {
+    this.sendMessage({ type: "command", message: "add", payload: [component] });
+  }
+
+  removeComponentFromModel(component) {
+    this.sendMessage({
+      type: "command",
+      message: "remove",
+      payload: [component],
+    });
+  }
+
+  injectModelDefinition(model_json) {
+    this.sendMessage({
+      type: "command",
+      message: "init",
+      payload: [model_json],
+    });
+  }
+
+  injectDefaultModelDefinition() {
     // load model definition file
     let defaultModelPath = new URL(
       "/public/definitions/normal_neonate.json",

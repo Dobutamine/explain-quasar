@@ -1,6 +1,6 @@
 import { CoreModel } from "./core_model";
 
-export class Valve extends CoreModel {
+export class Resistor extends CoreModel {
   // define the for this class specific parameters
   no_flow = false;
   no_backflow = false;

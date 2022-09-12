@@ -8,7 +8,7 @@
     "AA": {
       "name": "AA",
       "description": "ascending aorta",
-      "model_type": "BloodCompliance",
+      "model_type": "Compliance",
       "content": "blood",
       "is_enabled": true,
       "vol": 0.004554,
@@ -19,7 +19,7 @@
     "AAR": {
       "name": "AAR",
       "description": "aortic arch",
-      "model_type": "BloodCompliance",
+      "model_type": "Compliance",
       "content": "blood",
       "is_enabled": true,
       "vol": 0.004870372057873171,
@@ -30,7 +30,7 @@
     "AD": {
       "name": "AD",
       "description": "descending aorta",
-      "model_type": "BloodCompliance",
+      "model_type": "Compliance",
       "content": "blood",
       "is_enabled": true,
       "vol": 0.02935564265441993,
@@ -41,7 +41,7 @@
     "RLB": {
       "name": "RLB",
       "description": "lower body",
-      "model_type": "BloodCompliance",
+      "model_type": "Compliance",
       "content": "blood",
       "is_enabled": true,
       "vol": 0.0033,
@@ -52,7 +52,7 @@
     "LS": {
       "name": "LS",
       "description": "liver and spleen",
-      "model_type": "BloodCompliance",
+      "model_type": "Compliance",
       "content": "blood",
       "is_enabled": true,
       "vol": 0.0033,
@@ -63,7 +63,7 @@
     "KID": {
       "name": "KID",
       "description": "kidneys",
-      "model_type": "BloodCompliance",
+      "model_type": "Compliance",
       "content": "blood",
       "is_enabled": true,
       "vol": 0.0033,
@@ -74,7 +74,7 @@
     "INT": {
       "name": "INT",
       "description": "intestines",
-      "model_type": "BloodCompliance",
+      "model_type": "Compliance",
       "content": "blood",
       "is_enabled": true,
       "vol": 0.0033,
@@ -85,7 +85,7 @@
     "RUB": {
       "name": "RUB",
       "description": "upper body",
-      "model_type": "BloodCompliance",
+      "model_type": "Compliance",
       "content": "blood",
       "is_enabled": true,
       "vol": 0.00135,
@@ -96,7 +96,7 @@
     "BR": {
       "name": "BR",
       "description": "brain",
-      "model_type": "BloodCompliance",
+      "model_type": "Compliance",
       "content": "blood",
       "is_enabled": true,
       "vol": 0.00135,
@@ -107,7 +107,7 @@
     "IVCI": {
       "name": "IVCI",
       "description": "vena cava inferior intrathoracic",
-      "model_type": "BloodCompliance",
+      "model_type": "Compliance",
       "content": "blood",
       "is_enabled": true,
       "vol": 0.016176288666482266,
@@ -118,7 +118,7 @@
     "IVCE": {
       "name": "IVCE",
       "description": "vena cava inferior extrathoracic ",
-      "model_type": "BloodCompliance",
+      "model_type": "Compliance",
       "content": "blood",
       "is_enabled": true,
       "vol": 0.08424209047211135,
@@ -129,7 +129,7 @@
     "SVC": {
       "name": "SVC",
       "description": "superior vena cava",
-      "model_type": "BloodCompliance",
+      "model_type": "Compliance",
       "content": "blood",
       "is_enabled": true,
       "vol": 0.0758415645326887,
@@ -140,7 +140,7 @@
     "PA": {
       "name": "PA",
       "description": "pulmonary artery",
-      "model_type": "BloodCompliance",
+      "model_type": "Compliance",
       "is_enabled": true,
       "content": "blood",
       "vol": 0.00598044851676989,
@@ -151,7 +151,7 @@
     "LL": {
       "name": "LL",
       "description": "left lung",
-      "model_type": "BloodCompliance",
+      "model_type": "Compliance",
       "content": "blood",
       "is_enabled": true,
       "vol": 0.005654058574009633,
@@ -162,7 +162,7 @@
     "RL": {
       "name": "RL",
       "description": "right lung",
-      "model_type": "BloodCompliance",
+      "model_type": "Compliance",
       "content": "blood",
       "is_enabled": true,
       "vol": 0.005654058574009633,
@@ -173,7 +173,7 @@
     "PV": {
       "name": "PV",
       "description": "pulmonary veins",
-      "model_type": "BloodCompliance",
+      "model_type": "Compliance",
       "content": "blood",
       "is_enabled": true,
       "vol": 0.007152031736221479,
@@ -244,7 +244,7 @@
     "AA_AAR": {
       "name": "AA_AAR",
       "description": "ascending aorta to aortic arch",
-      "model_type": "BloodResistor",
+      "model_type": "Resistor",
       "is_enabled": true,
       "no_flow": false,
       "no_backflow": false,
@@ -257,7 +257,7 @@
     "AA_COR": {
       "name": "AA_COR",
       "description": "ascending aorta to coronaries",
-      "model_type": "BloodResistor",
+      "model_type": "Resistor",
       "is_enabled": true,
       "no_flow": false,
       "no_backflow": false,
@@ -270,7 +270,7 @@
     "COR_RA": {
       "name": "COR_RA",
       "description": "coronaries to right atrium",
-      "model_type": "BloodResistor",
+      "model_type": "Resistor",
       "is_enabled": true,
       "no_flow": false,
       "no_backflow": false,
@@ -283,7 +283,7 @@
     "AAR_AD": {
       "name": "AAR_AD",
       "description": "aortic arch to descending aorta",
-      "model_type": "BloodResistor",
+      "model_type": "Resistor",
       "is_enabled": true,
       "no_flow": false,
       "no_backflow": false,
@@ -296,7 +296,7 @@
     "AD_RLB": {
       "name": "AD_RLB",
       "description": "descending aorta to lower body",
-      "model_type": "BloodResistor",
+      "model_type": "Resistor",
       "is_enabled": true,
       "no_flow": false,
       "no_backflow": false,
@@ -309,7 +309,7 @@
     "AD_LS": {
       "name": "AD_LS",
       "description": "descending aorta to liver and spleen",
-      "model_type": "BloodResistor",
+      "model_type": "Resistor",
       "is_enabled": true,
       "no_flow": false,
       "no_backflow": false,
@@ -322,7 +322,7 @@
     "AD_KID": {
       "name": "AD_KID",
       "description": "descending aorta to kidneys",
-      "model_type": "BloodResistor",
+      "model_type": "Resistor",
       "is_enabled": true,
       "no_flow": false,
       "no_backflow": false,
@@ -335,7 +335,7 @@
     "AD_INT": {
       "name": "AD_INT",
       "description": "descending aorta to intestines",
-      "model_type": "BloodResistor",
+      "model_type": "Resistor",
       "is_enabled": true,
       "no_flow": false,
       "no_backflow": false,
@@ -348,7 +348,7 @@
     "AAR_RUB": {
       "name": "AAR_RUB",
       "description": "aortic arch to upper body",
-      "model_type": "BloodResistor",
+      "model_type": "Resistor",
       "is_enabled": true,
       "no_flow": false,
       "no_backflow": false,
@@ -361,7 +361,7 @@
     "AAR_BR": {
       "name": "AAR_BR",
       "description": "aortic arch to brain",
-      "model_type": "BloodResistor",
+      "model_type": "Resistor",
       "is_enabled": true,
       "no_flow": false,
       "no_backflow": false,
@@ -374,7 +374,7 @@
     "RUB_SVC": {
       "name": "RUB_SVC",
       "description": "upper body to superior vena cava",
-      "model_type": "BloodResistor",
+      "model_type": "Resistor",
       "is_enabled": true,
       "no_flow": false,
       "no_backflow": false,
@@ -387,7 +387,7 @@
     "BR_SVC": {
       "name": "BR_SVC",
       "description": "BR to superior vena cava",
-      "model_type": "BloodResistor",
+      "model_type": "Resistor",
       "is_enabled": true,
       "no_flow": false,
       "no_backflow": false,
@@ -400,7 +400,7 @@
     "RLB_IVCE": {
       "name": "RLB_IVCE",
       "description": "lower body to extrathoracic vci",
-      "model_type": "BloodResistor",
+      "model_type": "Resistor",
       "is_enabled": true,
       "no_flow": false,
       "no_backflow": false,
@@ -413,7 +413,7 @@
     "LS_IVCE": {
       "name": "LS_IVCE",
       "description": "liver and spleen to extrathoracic vci",
-      "model_type": "BloodResistor",
+      "model_type": "Resistor",
       "is_enabled": true,
       "no_flow": false,
       "no_backflow": false,
@@ -426,7 +426,7 @@
     "KID_IVCE": {
       "name": "KID_IVCE",
       "description": "kidneys to extrathoracic vci",
-      "model_type": "BloodResistor",
+      "model_type": "Resistor",
       "is_enabled": true,
       "no_flow": false,
       "no_backflow": false,
@@ -439,7 +439,7 @@
     "INT_IVCE": {
       "name": "INT_IVCE",
       "description": "intestines to extrathoracic vci",
-      "model_type": "BloodResistor",
+      "model_type": "Resistor",
       "is_enabled": true,
       "no_flow": false,
       "no_backflow": false,
@@ -452,7 +452,7 @@
     "IVCE_IVCI": {
       "name": "IVCE_IVCI",
       "description": "extrahoracic vena cava inferior to intrathoracic vci",
-      "model_type": "BloodResistor",
+      "model_type": "Resistor",
       "is_enabled": true,
       "no_flow": false,
       "no_backflow": false,
@@ -465,7 +465,7 @@
     "IVCI_RA": {
       "name": "IVCI_RA",
       "description": "intrathoracic vena cava inferior to right atrium",
-      "model_type": "BloodResistor",
+      "model_type": "Resistor",
       "is_enabled": true,
       "no_flow": false,
       "no_backflow": false,
@@ -478,7 +478,7 @@
     "SVC_RA": {
       "name": "SVC_RA",
       "description": "superior vena cava inferior to right atrium",
-      "model_type": "BloodResistor",
+      "model_type": "Resistor",
       "is_enabled": true,
       "no_flow": false,
       "no_backflow": false,
@@ -491,7 +491,7 @@
     "PA_LL": {
       "name": "PA_LL",
       "description": "pulmonary artery to left lung",
-      "model_type": "BloodResistor",
+      "model_type": "Resistor",
       "is_enabled": true,
       "no_flow": false,
       "no_backflow": false,
@@ -504,7 +504,7 @@
     "PA_RL": {
       "name": "PA_RL",
       "description": "pulmonary artery to right lung",
-      "model_type": "BloodResistor",
+      "model_type": "Resistor",
       "is_enabled": true,
       "no_flow": false,
       "no_backflow": false,
@@ -517,7 +517,7 @@
     "LL_PV": {
       "name": "LL_PV",
       "description": "left lung to pulmonary veins",
-      "model_type": "BloodResistor",
+      "model_type": "Resistor",
       "is_enabled": true,
       "no_flow": false,
       "no_backflow": false,
@@ -530,7 +530,7 @@
     "RL_PV": {
       "name": "RL_PV",
       "description": "right lung to pulmonary veins",
-      "model_type": "BloodResistor",
+      "model_type": "Resistor",
       "is_enabled": true,
       "no_flow": false,
       "no_backflow": false,
@@ -543,7 +543,7 @@
     "PV_LA": {
       "name": "PV_LA",
       "description": "pulmonary veins to  left atrium",
-      "model_type": "BloodResistor",
+      "model_type": "Resistor",
       "is_enabled": true,
       "no_flow": false,
       "no_backflow": false,
@@ -608,7 +608,7 @@
     "DA": {
       "name": "DA",
       "description": "ductus arteriosus",
-      "model_type": "BloodResistor",
+      "model_type": "Resistor",
       "is_enabled": false,
       "no_flow": true,
       "no_backflow": false,
@@ -621,7 +621,7 @@
     "FO": {
       "name": "FO",
       "description": "foramen ovale",
-      "model_type": "BloodResistor",
+      "model_type": "Resistor",
       "is_enabled": false,
       "no_flow": false,
       "no_backflow": false,
@@ -634,7 +634,7 @@
     "IPS": {
       "name": "IPS",
       "description": "lung shunt",
-      "model_type": "BloodResistor",
+      "model_type": "Resistor",
       "is_enabled": true,
       "no_flow": false,
       "no_backflow": false,
@@ -647,7 +647,7 @@
     "OUT": {
       "name": "OUT",
       "description": "outside air",
-      "model_type": "GasCompliance",
+      "model_type": "Compliance",
       "content": "gas",
       "is_enabled": true,
       "fixed_composition": false,
@@ -659,7 +659,7 @@
     "NCA": {
       "name": "NCA",
       "description": "non collapsible airways",
-      "model_type": "GasCompliance",
+      "model_type": "Compliance",
       "content": "gas",
       "is_enabled": true,
       "fixed_composition": false,
@@ -671,7 +671,7 @@
     "ALL": {
       "name": "ALL",
       "description": "alveolar left lung",
-      "model_type": "GasCompliance",
+      "model_type": "Compliance",
       "content": "gas",
       "fixed_composition": false,
       "is_enabled": true,
@@ -683,7 +683,7 @@
     "ALR": {
       "name": "ALR",
       "description": "alveolar right lung",
-      "model_type": "GasCompliance",
+      "model_type": "Compliance",
       "content": "gas",
       "is_enabled": true,
       "fixed_composition": false,
@@ -717,7 +717,7 @@
     "VENTIN": {
       "name": "VENTIN",
       "description": "ventilator insp compartment",
-      "model_type": "GasCompliance",
+      "model_type": "Compliance",
       "content": "gas",
       "is_enabled": false,
       "fixed_composition": true,
@@ -729,7 +729,7 @@
     "TUBINGIN": {
       "name": "TUBINGIN",
       "description": "ventilator tubing insp",
-      "model_type": "GasCompliance",
+      "model_type": "Compliance",
       "content": "gas",
       "is_enabled": false,
       "fixed_composition": false,
@@ -741,7 +741,7 @@
     "TUBINGOUT": {
       "name": "TUBINGOUT",
       "description": "ventilator tubing insp",
-      "model_type": "GasCompliance",
+      "model_type": "Compliance",
       "content": "gas",
       "is_enabled": false,
       "fixed_composition": false,
@@ -753,7 +753,7 @@
     "VENTOUT": {
       "name": "VENTOUT",
       "description": "ventilator exp compartment",
-      "model_type": "GasCompliance",
+      "model_type": "Compliance",
       "content": "gas",
       "is_enabled": false,
       "fixed_composition": true,
@@ -765,7 +765,7 @@
     "YPIECE": {
       "name": "YPIECE",
       "description": "ventilator y-piece",
-      "model_type": "GasCompliance",
+      "model_type": "Compliance",
       "content": "gas",
       "is_enabled": false,
       "fixed_composition": false,
@@ -777,7 +777,7 @@
     "OUT_NCA": {
       "name": "OUT_NCA",
       "description": "outside air to non-collapsible airways",
-      "model_type": "GasResistor",
+      "model_type": "Resistor",
       "is_enabled": true,
       "no_flow": false,
       "no_backflow": false,
@@ -790,7 +790,7 @@
     "NCA_ALL": {
       "name": "NCA_ALL",
       "description": "non-collapsible airways to alveolar left lung",
-      "model_type": "GasResistor",
+      "model_type": "Resistor",
       "is_enabled": true,
       "no_flow": false,
       "no_backflow": false,
@@ -803,7 +803,7 @@
     "NCA_ALR": {
       "name": "NCA_ALR",
       "description": "non-collapsible airways to alveolar right lung",
-      "model_type": "GasResistor",
+      "model_type": "Resistor",
       "is_enabled": true,
       "no_flow": false,
       "no_backflow": false,
@@ -816,7 +816,7 @@
     "VENT_INSP_VALVE": {
       "name": "VENT_INSP_VALVE",
       "description": "ventilator inspiration valve",
-      "model_type": "GasResistor",
+      "model_type": "Resistor",
       "is_enabled": false,
       "no_flow": false,
       "no_backflow": true,
@@ -829,7 +829,7 @@
     "TUBINGIN_YPIECE": {
       "name": "TUBINGIN_YPIECE",
       "description": "inspiratory tubing to ypiece",
-      "model_type": "GasResistor",
+      "model_type": "Resistor",
       "is_enabled": false,
       "no_flow": false,
       "no_backflow": false,
@@ -842,7 +842,7 @@
     "TUBINGIN_TUBINGOUT": {
       "name": "TUBINGIN_TUBINGOUT",
       "description": "inspiratory to expiratory tubing",
-      "model_type": "GasResistor",
+      "model_type": "Resistor",
       "is_enabled": false,
       "no_flow": false,
       "no_backflow": false,
@@ -855,7 +855,7 @@
     "YPIECE_NCA": {
       "name": "YPIECE_NCA",
       "description": "ventilator y-piece to non-collapsible airways",
-      "model_type": "GasResistor",
+      "model_type": "Resistor",
       "is_enabled": false,
       "no_flow": false,
       "no_backflow": false,
@@ -868,7 +868,7 @@
     "YPIECE_TUBINGOUT": {
       "name": "YPIECE_TUBINGOUT",
       "description": "expiratory tubing to ypiece",
-      "model_type": "GasResistor",
+      "model_type": "Resistor",
       "is_enabled": false,
       "no_flow": false,
       "no_backflow": false,
@@ -881,7 +881,7 @@
     "VENT_EXP_VALVE": {
       "name": "VENT_EXP_VALVE",
       "description": "ventilator expiration valve",
-      "model_type": "GasResistor",
+      "model_type": "Resistor",
       "is_enabled": false,
       "no_flow": false,
       "no_backflow": false,
@@ -905,7 +905,7 @@
     "DIFF_LL": {
       "name": "DIFF_LL",
       "description": "diffusor left lung nca",
-      "model_type": "GasDiffusor",
+      "model_type": "Diffusor",
       "comp_gas1": "ALL",
       "comp_gas2": "NCA",
       "is_enabled": true,
@@ -917,7 +917,7 @@
     "DIFF_RL": {
       "name": "DIFF_RL",
       "description": "diffusor right lung nca",
-      "model_type": "GasDiffusor",
+      "model_type": "Diffusor",
       "comp_gas1": "ALR",
       "comp_gas2": "NCA",
       "is_enabled": true,
@@ -929,7 +929,7 @@
     "DIFF_NCA": {
       "name": "DIFF_NCA",
       "description": "diffusor nca to out",
-      "model_type": "GasDiffusor",
+      "model_type": "Diffusor",
       "comp_gas1": "NCA",
       "comp_gas2": "OUT",
       "is_enabled": true,
@@ -940,8 +940,8 @@
     },
     "GASEX_LL": {
       "name": "GASEX_LL",
-      "description": "gasexchanger blood-gas left lung",
-      "model_type": "GasExchanger",
+      "description": "Exchanger blood-gas left lung",
+      "model_type": "Exchanger",
       "comp_blood": "LL",
       "comp_gas": "ALL",
       "is_enabled": true,
@@ -952,8 +952,8 @@
     },
     "GASEX_LR": {
       "name": "GASEX_LR",
-      "description": "gasexchanger blood-gas right lung",
-      "model_type": "GasExchanger",
+      "description": "Exchanger blood-gas right lung",
+      "model_type": "Exchanger",
       "comp_blood": "RL",
       "comp_gas": "ALR",
       "is_enabled": true,
@@ -962,11 +962,16 @@
       "dif_n2": 0.01,
       "dif_other": 0.01
     },
-    "ecg": {
-      "name": "ecg",
-      "description": "ecg model",
-      "model_type": "Ecg",
+    "heart": {
+      "name": "heart",
+      "description": "heart ecg and activation",
+      "model_type": "Heart",
       "is_enabled": true,
+      "aaf_right_targets": ["RA"],
+      "aaf_left_targets": ["LA"],
+      "vaf_right_targets": ["RV"],
+      "vaf_left_targets": ["LV"],
+      "coronaries": ["COR"],
       "heart_rate": 155,
       "heart_rate_ref": 155,
       "venticular_escape_rate": 40,
@@ -1009,18 +1014,6 @@
         { "comp": "AA", "fvatp": 0.005 },
         { "comp": "AD", "fvatp": 0.01 }
       ]
-    },
-    "heart": {
-      "name": "heart",
-      "description": "heart contraction model",
-      "model_type": "Heart",
-      "is_enabled": true,
-      "activation_delay": 0,
-      "right_atrium": ["RA"],
-      "left_atrium": ["LA"],
-      "right_ventricle": ["RV"],
-      "left_ventricle": ["LV"],
-      "coronaries": ["COR"]
     },
     "effector_heartrate": {
       "name": "ef_hr",
@@ -1360,13 +1353,6 @@
       "diameter": 3.5,
       "length": 10.0,
       "viscosity": 5.5
-    },
-    "custom_model_example": {
-      "name": "CustomModelExample",
-      "description": "",
-      "model_type": "CustomModelExample",
-      "is_enabled": true,
-      "example_property": 10
     }
   }
 }
