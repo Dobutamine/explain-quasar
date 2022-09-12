@@ -14,10 +14,7 @@ export class TimeVaryingElastance extends CoreModel {
   // define the state variables
   pres = 0;
   pres_recoil = 0;
-  pres_transmural = 0;
   pres_outside = 0;
-  pres_atm = 0;
-  pres_itp = 0;
   pres_max = 0;
   pres_min = 0;
   vol = 0;
@@ -62,14 +59,10 @@ export class TimeVaryingElastance extends CoreModel {
     this.pres_recoil = vol_above_u * this.el;
 
     // calculate the pressure which refers to the pressure inside relative to the outside of a compartment.
-    this.pres =
-      this.pres_recoil + this.pres_outside + this.pres_itp + this.pres_atm;
+    this.pres = this.pres_recoil + this.pres_outside;
 
     //reset the outside pressure as it needs to be set every model cycle
     this.pres_outside = 0;
-
-    //reset the intrathoracic pressure as it needs to be set every model cycle nu the itp model
-    this.pres_itp = 0;
 
     // calculate the minimal and maximal pressure and volume
     this.calcMinMax();
