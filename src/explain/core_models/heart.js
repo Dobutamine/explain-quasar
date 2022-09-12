@@ -13,6 +13,17 @@ export class Heart extends CoreModel {
   coronaries = [];
 
   // activation function shape parameters
+  atrial_a = 1.0;
+  atrial_b = 0.5;
+  atrial_c = 0.2;
+
+  ventr_a1 = 0.5;
+  ventr_b1 = 0.5;
+  ventr_c1 = 0.2;
+
+  ventr_a2 = 0.59;
+  ventr_b2 = 0.6;
+  ventr_c2 = 0.13;
 
   // ecg parameters
   heart_rate = 155;
