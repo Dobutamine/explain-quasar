@@ -281,16 +281,20 @@ export class Heart extends CoreModel {
 
     // transfer the activation factors to the correct time varying elastances
     this.aaf_left_targets.forEach(
-      (target) => (target.varying_elastance_factor = this.aaf)
+      (target) =>
+        (this.model.components[target].varying_elastance_factor = this.aaf)
     );
     this.aaf_right_targets.forEach(
-      (target) => (target.varying_elastance_factor = this.aaf)
+      (target) =>
+        (this.model.components[target].varying_elastance_factor = this.aaf)
     );
     this.vaf_left_targets.forEach(
-      (target) => (target.varying_elastance_factor = this.vaf)
+      (target) =>
+        (this.model.components[target].varying_elastance_factor = this.vaf)
     );
     this.vaf_right_targets.forEach(
-      (target) => (target.varying_elastance_factor = this.vaf)
+      (target) =>
+        (this.model.components[target].varying_elastance_factor = this.vaf)
     );
   }
 }
