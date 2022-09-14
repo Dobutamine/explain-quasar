@@ -1290,6 +1290,18 @@
         "RL": 0.3
       }
     },
+    "acidbase": {
+      "name": "acidbase",
+      "description": "",
+      "model_type": "Acidbase",
+      "is_enabled": true
+    },
+    "oxygenation": {
+      "name": "oxygenation",
+      "description": "",
+      "model_type": "Oxygenation",
+      "is_enabled": true
+    },
     "drugs": {
       "name": "drugs",
       "description": "",

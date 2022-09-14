@@ -28,5 +28,7 @@ export { MechanicalVentilator } from "./core_models/mechanical_ventilator";
 export { Metabolism } from "./core_models/metabolism";
 export { Pda } from "./core_models/pda";
 export { Placenta } from "./core_models/placenta";
+export { Acidbase } from "./core_models/acidbase";
+export { Oxygenation } from "./core_models/oxygenation";
 
 // custom models

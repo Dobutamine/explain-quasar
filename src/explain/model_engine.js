@@ -97,7 +97,7 @@ function newEmptyModel(modelDefinition) {
       }
     }
     // add a datacollector instance to the model object
-    model["data"] = new DataCollector();
+    model["data"] = new DataCollector(model);
 
     if (!error) {
       // if no error signal the parent that everything went ok
@@ -141,7 +141,7 @@ function init(modelDefinition) {
       }
     }
     // add a datacollector instance to the model object
-    model["data"] = new DataCollector();
+    model["data"] = new DataCollector(model);
 
     // initiliaze all model components
     Object.values(modelDefinition.components).forEach((component) => {
@@ -188,7 +188,7 @@ function init(modelDefinition) {
     modelInitialized = false;
     postMessage({
       type: "error",
-      message: "invalid model definsssition",
+      message: "invalid model definition",
       payload: [e],
     });
   }

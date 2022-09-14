@@ -109,7 +109,9 @@ export default class Model {
             console.log(`ModelEngine: status => ${e.data.message}`);
             break;
           case "error":
-            console.log(`ModelEngine: error =>  ${e.data.message}`);
+            console.log(
+              `ModelEngine: error => ${e.data.message} ${e.data.payload}`
+            );
             break;
         }
       };

@@ -57,12 +57,12 @@ export class Heart extends CoreModel {
   // local state properties
   _sa_node_period = 0;
   _sa_node_counter = 0;
-  _pq_running = False;
+  _pq_running = false;
   _pq_time_counter = 0;
-  _qrs_running = False;
+  _qrs_running = false;
   _qrs_time_counter = 0;
-  _qt_running = False;
-  _ventricle_is_refractory = False;
+  _qt_running = false;
+  _ventricle_is_refractory = false;
   _qt_time_counter = 0;
   _measured_hr_time_counter = 0;
   _measured_qrs_counter = 0;
