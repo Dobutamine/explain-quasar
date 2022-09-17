@@ -16,10 +16,22 @@ export class Acidbase extends CoreModel {
     // get the path to the wasm module
     let wasm_path = new URL("/public/wasm/acidbase.wasm", import.meta.url);
 
+    // define some memory for the wasm
+    const memory = new WebAssembly.Memory({ initial: 10, maximum: 100 });
+
+    const importObject = {
+      module: {},
+      env: {
+        memory: memory,
+      },
+    };
+
     // load the wasm module
-    WebAssembly.instantiateStreaming(fetch(wasm_path)).then((wasm) => {
-      this.ab_cpp = wasm;
-      console.log(this.ab_cpp);
-    });
+    WebAssembly.instantiateStreaming(fetch(wasm_path), importObject).then(
+      (wasm) => {
+        this.ab_cpp = wasm;
+        console.log(this.ab_cpp);
+      }
+    );
   }
 }
