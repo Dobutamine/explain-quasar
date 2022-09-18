@@ -2,7 +2,11 @@ import { CoreModel } from "./core_model";
 
 export class Oxygenation extends CoreModel {
   _model = {};
-  oxy_cpp = {};
+  is_initialized = false;
+  oxy_cpp = {
+    calculate: {},
+    data: {},
+  };
 
   constructor(args, model_ref) {
     // call the base class which defines the methods (modelStep, initModel and calcModel) and the common parameters (name, description, is_enabled)
@@ -16,32 +20,25 @@ export class Oxygenation extends CoreModel {
     // get the path to the wasm module
     const wasm_path = new URL("/public/wasm/oxygenation.wasm", import.meta.url);
 
-    // define some memory for the wasm
-    const memory = new WebAssembly.Memory({ initial: 10, maximum: 100 });
-
-    const i32 = new Uint32Array(memory.buffer);
-    for (let i = 0; i < 10; i++) {
-      i32[i] = i;
-    }
-
-    const importObject = {
-      module: {},
-      env: {
-        memory: memory,
-      },
-    };
-
     // load the wasm module
-    WebAssembly.instantiateStreaming(fetch(wasm_path), importObject).then(
-      (wasm) => {
-        this.oxy_cpp = wasm;
-        console.log(this.oxy_cpp);
-        this.oxy_cpp.instance.exports.oxygenation(9.7, 5, 10, 0, 37);
-        let t = this.oxy_cpp.instance.exports.pO2();
-        console.log(t);
-        let s = this.oxy_cpp.instance.exports.sO2();
-        console.log(s);
-      }
-    );
+    WebAssembly.instantiateStreaming(fetch(wasm_path)).then((wasm) => {
+      // store the calculate function of the c++ module in an js object for easy access
+      this.oxy_cpp.calculate = wasm.instance.exports.calculate;
+      // store a reference to the ArrayBuffer of the memory of the c++ module
+      this.oxy_cpp.data = new Float64Array(
+        wasm.instance.exports.memory.buffer,
+        wasm.instance.exports.getMemAddress(),
+        2
+      );
+
+      this.is_initialized = true;
+
+      // // double _to2, double _dpg, double _hemoglobin, double _be, double _temp
+      // this.oxy_cpp.calculate(9.14, 5.0, 10.0, 0.0, 37.0);
+      // console.log(this.oxy_cpp.data);
+
+      // this.oxy_cpp.calculate(9.84, 5.0, 10.0, 0.0, 37.0);
+      // console.log(this.oxy_cpp.data);
+    });
   }
 }

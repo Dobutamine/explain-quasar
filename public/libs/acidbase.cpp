@@ -1,20 +1,31 @@
 #include <iostream>
 #include <cmath>
+#include <cstdint>
+std::uintptr_t i;
+
 using namespace std;
 
 extern "C" {
+  struct acidb {
+    double ph = 7.40;
+    double pco2 = 5.4;
+    double hco3 = 24.5;
+    double be = 0.0;
+  };
+
   // brent
   double brent_accuracy = 1e-8;
   int max_iterations = 100.0;
   int steps = 0;
 
   // acid base constants
-  double kw = pow (10.0, -13.6) * 1000.0;
-  double kc = pow(10.0, -6.1) * 1000.0;
-  double kd = pow(10.0, -10.22) * 1000.0;
-  double left_hp = pow(10.0, -7.8) * 1000.0;
-  double right_hp = pow(10.0, -6.8) * 1000.0;
+  double kw = 0.000000000025119;
+  double kc = 0.000794328234724;
+  double kd = 0.000000060255959;
+  double left_hp =  0.000015848931925;
+  double right_hp = 0.000158489319246;
   double alpha_co2p = 0.0309;
+
   double tco2 = 0;
   double albumin = 0;
   double phosphates = 0;
@@ -26,14 +37,19 @@ extern "C" {
   double ph = 7.40;
   double pco2 = 0;
   double hco3 = 0;
-  double cco3 = 0;
-  double cco2 = 0;
   double be = 0;
+
+   acidb ab_data = {
+    ph = 7.40,
+    pco2 = 5.4,
+    hco3 = 24.5,
+    be = 0.0,
+  };
 
 
   double net_charge_plasma(double hp_estimate) {
       // calculate the ph based on the current hp estimate
-      double ph = -log10(hp_estimate / 1000.0);
+      ph = -log10(hp_estimate / 1000.0);
 
       // we do know the total co2 concentration but we now have to find out the distribution of the co2 where tco2 = cco2 + hco3 + cco3
       // cco2 = plasma concentration of co2 -> charge neutral
@@ -75,8 +91,6 @@ extern "C" {
       // calculate the pco2 and store the plasma hco3
       pco2 = pco2p;
       hco3 = hco3p;
-      cco3 = co3p;
-      cco2 = cco2p;
 
       // return the net charge to the brent function
       return netcharge;
@@ -215,7 +229,7 @@ extern "C" {
       return sb;
   }
 
-  void acidbase(double _tco2, double _sid, double _albumin, double _phoshates, double _uma) {
+  void calculate(double _tco2, double _sid, double _albumin, double _phoshates, double _uma) {
       tco2 = _tco2;
       sid = _sid;
       albumin = _albumin;
@@ -223,23 +237,26 @@ extern "C" {
       uma = _uma;
 
       // find the [H+] where the netcharge is zero
-      double hp = brent_find_root_ab(left_hp, right_hp, brent_accuracy,max_iterations);
+      double hp = brent_find_root_ab(left_hp, right_hp, brent_accuracy, max_iterations);
 
       // construct the bloodgas
-      ph = -log10(hp / 1000);
-      pco2 = pco2;
-      hco3 = hco3;
-      be = be;
+      ab_data.ph = -log10(hp / 1000);
+      ab_data.pco2 = pco2;
+      ab_data.hco3 = hco3;
+      ab_data.be = be;
 
+  }
+
+  int getMemAddress() {
+    // convert the pointer to the result struct into an integer
+    auto i = reinterpret_cast<std::uintptr_t>(&ab_data);
+
+    // return the memory address of the result struct
+    return i;
   }
 
 
 }
 
-int main() {
-    acidbase(25.1, 39.6, 30, 1.8, 4.0);
-    return 0;
-}
 
-
-// emcc public/libs/acidbase.cpp -s WASM=1 -s EXPORTED_FUNCTIONS="['_main']" -o public/wasm/acidbase.js
+// emcc public/libs/acidbase.cpp -s WASM=1 -s EXPORTED_FUNCTIONS="['_calculate','_getMemAddress']" -o public/wasm/acidbase.js

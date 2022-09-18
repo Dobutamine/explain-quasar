@@ -1,8 +1,20 @@
 #include <iostream>
 #include <cmath>
+#include <cstdint>
+std::uintptr_t i;
+
 using namespace std;
 
+
+
+
 extern "C" {
+
+  struct oxy {
+    double po2 = 100;
+    double so2 = 1.0;
+  };
+
   // brent
   double brent_accuracy = 1e-8;
   int max_iterations = 100.0;
@@ -23,6 +35,13 @@ extern "C" {
   double so2 = 0.98;
   double be = 0;
   double ph = 7.40;
+
+  oxy oxy_data = {
+    po2 = 100,
+    so2 = 1.0
+  };
+
+
 
   double oxygen_dissociation_curve(double po2_estimate) {
       // calculate the saturation from the po2 depending on the ph,be, temperature and dpg level.
@@ -191,27 +210,28 @@ extern "C" {
       return sb;
   }
 
-  void oxygenation(double _to2, double _dpg, double _hemoglobin, double _be, double _temp) {
+  void calculate(double _to2, double _dpg, double _hemoglobin, double _be, double _temp) {
       to2 = _to2;
       dpg = _dpg;
       hemoglobin = _hemoglobin;
       temp = _temp;
 
       po2 = brent_find_root_oxy(left_o2, right_o2, brent_accuracy, max_iterations);
+
+      // store the results in memory
+      oxy_data.po2 = po2;
+      oxy_data.so2 = so2;
+  }
+  int getMemAddress() {
+    // convert the pointer to the result struct into an integer
+    auto i = reinterpret_cast<std::uintptr_t>(&oxy_data);
+
+    // return the memory address of the result struct
+    return i;
   }
 
-  double pO2() {
-    return po2;
-  }
-  double sO2() {
-    return so2;
-  }
 }
 
-int main() {
-    oxygenation(9.8, dpg, hemoglobin, be, temp);
-    return 0;
-}
 
 
-// emcc public/libs/oxygenation.cpp -s WASM=1 -s EXPORTED_FUNCTIONS="['_main','_oxygenation','_pO2','_sO2']" -o public/wasm/oxygenation.js
+// emcc public/libs/oxygenation.cpp -s WASM=1 -s EXPORTED_FUNCTIONS="['_calculate','_getMemAddress']" -o public/wasm/oxygenation.js

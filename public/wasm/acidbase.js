@@ -995,7 +995,7 @@ function createExportWrapper(name, fixedasm) {
 }
 
 var wasmBinaryFile;
-  wasmBinaryFile = 'oxygenation.wasm';
+  wasmBinaryFile = 'acidbase.wasm';
   if (!isDataURI(wasmBinaryFile)) {
     wasmBinaryFile = locateFile(wasmBinaryFile);
   }
