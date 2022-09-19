@@ -1134,7 +1134,6 @@
       "description": "blood composition model",
       "model_type": "Blood",
       "is_enabled": true,
-      "p_atm": 0,
       "compounds": {
         "to2": {
           "conc": 9.1,
@@ -1206,24 +1205,6 @@
           "unit": "mmol/l",
           "fixed": true
         }
-      },
-      "fixed_blood_compounds": {
-        "hemoglobin": 10,
-        "dpg": 5.0,
-        "albumin": 30.0,
-        "phosphates": 1.5,
-        "uma": 7.2,
-        "sodium": 138,
-        "potassium": 4.0,
-        "calcium": 1.0,
-        "magnesium": 0.9,
-        "chloride": 103,
-        "urate": 0.2,
-        "lactate": 1.0
-      },
-      "circulating_blood_compounds": {
-        "to2": 9.1,
-        "tco2": 24.6
       }
     },
     "gas": {
@@ -1294,13 +1275,15 @@
       "name": "acidbase",
       "description": "",
       "model_type": "Acidbase",
-      "is_enabled": true
+      "is_enabled": true,
+      "components": ["AA"]
     },
     "oxygenation": {
       "name": "oxygenation",
       "description": "",
       "model_type": "Oxygenation",
-      "is_enabled": true
+      "is_enabled": true,
+      "components": ["AA"]
     },
     "drugs": {
       "name": "drugs",

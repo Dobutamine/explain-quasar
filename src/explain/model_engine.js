@@ -180,8 +180,11 @@ function init(modelDefinition) {
         message: "engine initialized",
         payload: [],
       });
-      //console.log(this.model.components);
-      //model.components.AA_AAR.modelStep();
+
+      model.components.AA.modelStep();
+      model.components.AA.modelStep();
+
+      console.log(model.components.AA);
     }
   } catch (e) {
     // if error signal the parent that there was an error
