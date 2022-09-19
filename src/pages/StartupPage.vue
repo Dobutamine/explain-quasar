@@ -3,12 +3,13 @@
     <div class="stage" :style="{ display: display }">
       <canvas id="stage"></canvas>
     </div>
-
+    <q-btn @click="test">test</q-btn>
     <q-resize-observer @resize="onResize" />
   </q-page>
 </template>
 
 <script>
+import { explainModel } from "../boot/explain";
 import { PIXI } from "../boot/pixijs";
 import Compartment from "../actors/compartment";
 
@@ -30,6 +31,9 @@ export default {
     };
   },
   methods: {
+    test() {
+      explainModel.calculate(30);
+    },
     dropComponent() {
       console.log("dropped");
     },

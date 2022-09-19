@@ -105,10 +105,10 @@ export class Compliance extends CoreModel {
       this.vol_max = this._temp_vol_max;
       this.vol_min = this._temp_vol_min;
       // reset states
-      _temp_pres_max = -1000;
-      _temp_pres_min = 1000;
-      _temp_vol_max = -1000;
-      _temp_vol_min = 1000;
+      this._temp_pres_max = -1000;
+      this._temp_pres_min = 1000;
+      this._temp_vol_max = -1000;
+      this._temp_vol_min = 1000;
       this._update_counter = 0;
     }
 

@@ -34,7 +34,7 @@ export class Resistor extends CoreModel {
 
     if (this.comp_from && this.comp_to) {
       this.is_initialized = true;
-      console.log(`Initialized resistor ${this.name}`);
+      // console.log(`Initialized resistor ${this.name}`);
     } else {
       console.log(`Error initializing ${this.name}.`);
     }

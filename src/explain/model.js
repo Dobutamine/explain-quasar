@@ -95,6 +95,14 @@ export default class Model {
     // stop the realtime model
   }
 
+  calculate(time_to_calculate) {
+    this.sendMessage({
+      type: "command",
+      message: "calculate",
+      payload: [time_to_calculate],
+    });
+  }
+
   sendMessage(message) {
     if (this.modelEngine) {
       this.modelEngine.postMessage(message);

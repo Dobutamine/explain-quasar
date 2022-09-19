@@ -180,11 +180,6 @@ function init(modelDefinition) {
         message: "engine initialized",
         payload: [],
       });
-
-      model.components.AA.modelStep();
-      model.components.AA.modelStep();
-
-      console.log(model.components.AA);
     }
   } catch (e) {
     // if error signal the parent that there was an error
@@ -209,7 +204,24 @@ function stop() {
 
 function calculate(time_to_calculate = 10.0) {
   if (modelInitialized) {
+    let no_steps = time_to_calculate / model.modeling_stepsize;
+    console.log(`Calculating ${time_to_calculate} sec. in ${no_steps} steps.`);
+    const start = performance.now();
+    for (let i = 0; i < no_steps; i++) {
+      modelStep();
+    }
+    const end = performance.now();
+
+    console.log(`Execution time: ${(end - start).toFixed(0)} ms`);
+    const step_time = (end - start) / no_steps;
+    console.log(`Model step: ${step_time.toFixed(4)} ms`);
   }
 }
 
-function modelStep() {}
+function modelStep() {
+  Object.values(model.components).forEach((component) => {
+    component.modelStep();
+  });
+  model.data.modelStep();
+  model.model_time_total += model.modeling_stepsize;
+}

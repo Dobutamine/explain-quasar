@@ -1276,14 +1276,14 @@
       "description": "",
       "model_type": "Acidbase",
       "is_enabled": true,
-      "components": ["AA"]
+      "components": ["AA", "LL", "RL", "RA"]
     },
     "oxygenation": {
       "name": "oxygenation",
       "description": "",
       "model_type": "Oxygenation",
       "is_enabled": true,
-      "components": ["AA"]
+      "components": ["AA", "LL", "RL", "RA"]
     },
     "drugs": {
       "name": "drugs",

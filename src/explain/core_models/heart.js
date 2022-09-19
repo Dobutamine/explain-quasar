@@ -95,7 +95,7 @@ export class Heart extends CoreModel {
     this.cqt_time = this.qtc() - this.qrs_time;
 
     // calculate the sa_node_time in seconds depending on the heartrate
-    this._sa_node_counter = 60;
+    this._sa_node_period = 60;
     if (this.heart_rate > 0) {
       this._sa_node_period = 60 / this.heart_rate;
     }
@@ -230,6 +230,8 @@ export class Heart extends CoreModel {
 
   calcVaryingElastanceFactor() {
     const _t = this.model.modeling_stepsize;
+    const atrial_duration = this.pq_time;
+    const ventricular_duration = this.cqt_time + this.qrs_time;
 
     if (this._ncc_atrial >= 0 && this._ncc_atrial < this.pq_time / _t) {
       // gaussian curve => y = a * exp(-((t - b) / c)^2) where
@@ -245,12 +247,10 @@ export class Heart extends CoreModel {
       this.aaf = a * Math.exp(-Math.pow((t - b) / c, 2));
     }
 
-    const ventricular_duration = this.cqt_time + this.qrs_time;
-
     // varying elastance activation function of the ventricles
     if (
-      this.ncc_ventricular >= 0 &&
-      this.ncc_ventricular < ventricular_duration / _t
+      this._ncc_ventricular >= 0 &&
+      this._ncc_ventricular < ventricular_duration / _t
     ) {
       // the ventricular activation curve consists of two gaussian curves on top of each other
       // gaussian curve => y = a * exp(-((t - b) / c)^2) where
@@ -258,15 +258,15 @@ export class Heart extends CoreModel {
       // b = position of the peak
       // c = atrial duration
 
-      const a1 = 0.5;
-      const b1 = 0.5 * ventricular_duration;
-      const c1 = 0.2 * ventricular_duration;
+      const a1 = this.ventr_a1;
+      const b1 = this.ventr_b1 * ventricular_duration;
+      const c1 = this.ventr_c1 * ventricular_duration;
 
-      const a2 = 0.59;
-      const b2 = 0.6 * ventricular_duration;
-      const c2 = 0.13 * ventricular_duration;
+      const a2 = this.ventr_a2;
+      const b2 = this.ventr_b2 * ventricular_duration;
+      const c2 = this.ventr_c2 * ventricular_duration;
 
-      const t = this.ncc_ventricular * _t;
+      const t = this._ncc_ventricular * _t;
       const vaf1 = a1 * Math.exp(-Math.pow((t - b1) / c1, 2));
       const vaf2 = a2 * Math.exp(-Math.pow((t - b2) / c2, 2));
 

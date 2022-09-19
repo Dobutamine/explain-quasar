@@ -10,6 +10,8 @@ export class Acidbase extends CoreModel {
   // define an array holding the component names
   components = [];
 
+  counter = 0;
+
   constructor(args, model_ref) {
     // call the base class which defines the methods (modelStep, initModel and calcModel) and the common parameters (name, description, is_enabled)
     super(args, model_ref);
