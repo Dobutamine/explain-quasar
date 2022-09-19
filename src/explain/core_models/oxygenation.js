@@ -58,10 +58,15 @@ export class Oxygenation extends CoreModel {
       // get the component from the model
       let component = this.model.components[component_name];
 
-      // get the properties of the component (to2, dpg, hemoglobin, be, temp)
+      // get the properties of the component (double _to2, double _dpg, double _hemoglobin, double _be, double _temp)
+      let to2 = component.compounds.to2.conc;
+      let dpg = component.compounds.dpg.conc;
+      let hb = component.compounds.hemoglobin.conc;
+      let be = component.acidbase.be;
+      let temp = this.model.components.metabolism.body_temp;
 
       // calculate the po2 and so2 using the wasm module
-      this.oxy_cpp.calculate(9.1, 5.0, 10.0, 0.0, 37.0);
+      this.oxy_cpp.calculate(to2, dpg, hb, be, temp);
 
       // set the results on the component from the wasm memory
       component.oxygenation.po2 = this.oxy_cpp.data[0];
