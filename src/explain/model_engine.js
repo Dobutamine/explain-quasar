@@ -10,6 +10,9 @@ let model = {
 // declare the model initialization flag
 let modelInitialized = false;
 
+// declare a model data object
+let model_data = [];
+
 // store all models in a list
 const available_models = [];
 Object.values(models).forEach((model) => available_models.push(model));
@@ -207,8 +210,10 @@ function stop() {
 
 function getModelData() {
   // get the data from the datacollector
-  const model_data = model.data.getData();
+  model_data = model.data.getData();
+}
 
+function sendModelData() {
   // send the data to the model instance
   postMessage({
     type: "data",
@@ -220,15 +225,32 @@ function getModelData() {
 function calculate(time_to_calculate = 10.0) {
   if (modelInitialized) {
     let no_steps = time_to_calculate / model.modeling_stepsize;
-    console.log(`Calculating ${time_to_calculate} sec. in ${no_steps} steps.`);
+    postMessage({
+      type: "status",
+      message: `Calculating ${time_to_calculate} sec. in ${no_steps} steps.`,
+      payload: [],
+    });
     const start = performance.now();
     for (let i = 0; i < no_steps; i++) {
       modelStep();
     }
     const end = performance.now();
-    console.log(`Execution time: ${(end - start).toFixed(0)} ms`);
+    postMessage({
+      type: "status",
+      message: `Execution time: ${(end - start).toFixed(0)} ms`,
+      payload: [],
+    });
     const step_time = (end - start) / no_steps;
-    console.log(`Model step: ${step_time.toFixed(4)} ms`);
+    postMessage({
+      type: "status",
+      message: `Model step: ${step_time.toFixed(4)} ms`,
+      payload: [],
+    });
+
+    // get the model data from the engine
+    getModelData();
+    // send the model data to the model instance
+    sendModelData();
   }
 }
 

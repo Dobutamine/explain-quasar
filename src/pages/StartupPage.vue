@@ -58,8 +58,20 @@ export default {
         }
       }
     },
+    dataUpdate() {
+      console.log(explainModel.modelData);
+    },
+    statusUpdate() {
+      console.log(explainModel.statusMessage);
+    },
+  },
+  beforeUnmount() {
+    document.removeEventListener("data", this.dataUpdate);
+    document.removeEventListener("status", this.statusUpdate);
   },
   mounted() {
+    document.addEventListener("data", this.dataUpdate);
+    document.addEventListener("status", this.statusUpdate);
     // get a reference to the stage element
     this.canvas = document.getElementById("stage");
     // set the PIXI resolution

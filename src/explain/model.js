@@ -5,6 +5,27 @@ export default class Model {
   // declare an object holding the model definition
   modelDefinition = {};
 
+  // declare an object holding the model data coming from the engine
+  modelData = [];
+
+  // declare an object holding the model realtime data coming from the engine
+  modelDataRT = [];
+
+  // declare the events
+  data_event = new CustomEvent("data");
+  status_event = new CustomEvent("status");
+  error_event = new CustomEvent("error");
+
+  // declare an object holding the status log
+  statusMessage = "";
+  statusLog = [];
+  maxStatusLog = 10;
+
+  // decalre an object holding the error log
+  errorMessage = "";
+  errorLog = [];
+  maxErrorLog = 10;
+
   constructor() {
     // spin up a worker thread
     this.modelEngine = new Worker(
@@ -14,6 +35,7 @@ export default class Model {
     // setup the communication channel with the worker thread
     this.setUpCommChannel();
 
+    // startup with the default model
     this.injectDefaultModelDefinition();
   }
 
@@ -110,6 +132,7 @@ export default class Model {
       payload: [],
     });
   }
+
   sendMessage(message) {
     if (this.modelEngine) {
       this.modelEngine.postMessage(message);
@@ -121,15 +144,30 @@ export default class Model {
       this.modelEngine.onmessage = (e) => {
         switch (e.data.type) {
           case "status":
-            console.log(`ModelEngine: status => ${e.data.message}`);
+            this.statusMessage = e.data.message;
+            this.statusLog.push(e.data.message);
+            if (this.statusLog.length > this.maxStatusLog) {
+              this.statusLog.shift();
+            }
+            // raise status event
+            document.dispatchEvent(this.status_event);
             break;
           case "error":
-            console.log(
-              `ModelEngine: error => ${e.data.message} ${e.data.payload}`
-            );
+            this.errorMessage = e.data.message;
+            this.errorLog.push(e.data.message);
+            if (this.errorLog.length > this.maxErrorLog) {
+              this.errorLog.shift();
+            }
+            // raise error event
+            document.dispatchEvent(this.error_event);
             break;
           case "data":
-            console.log(e.data.payload);
+            this.modelData = e.data.payload;
+            // raise data event
+            document.dispatchEvent(this.data_event);
+            break;
+          case "rt_data":
+            this.modelDataRT = e.data.payload;
             break;
         }
       };
