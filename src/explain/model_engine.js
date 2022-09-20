@@ -38,6 +38,9 @@ onmessage = (e) => {
         case "calculate":
           calculate(e.data.payload[0]);
           break;
+        case "data":
+          getModelData();
+          break;
       }
       break;
   }
@@ -202,6 +205,18 @@ function stop() {
   }
 }
 
+function getModelData() {
+  // get the data from the datacollector
+  const model_data = model.data.getData();
+
+  // send the data to the model instance
+  postMessage({
+    type: "data",
+    message: "",
+    payload: model_data,
+  });
+}
+
 function calculate(time_to_calculate = 10.0) {
   if (modelInitialized) {
     let no_steps = time_to_calculate / model.modeling_stepsize;
@@ -211,7 +226,6 @@ function calculate(time_to_calculate = 10.0) {
       modelStep();
     }
     const end = performance.now();
-
     console.log(`Execution time: ${(end - start).toFixed(0)} ms`);
     const step_time = (end - start) / no_steps;
     console.log(`Model step: ${step_time.toFixed(4)} ms`);

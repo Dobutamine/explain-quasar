@@ -16,7 +16,10 @@ export default class DataCollector {
 
   model_data = [];
 
-  log_items = [{ model: "AA", prim_prop: "acidbase", sec_prop: "ph" }];
+  log_items = [
+    { model: "AA", prim_prop: "pres", sec_prop: "" },
+    { model: "RA", prim_prop: "pres", sec_prop: "" },
+  ];
 
   constructor(model_ref) {
     // store a reference to the model object
@@ -38,6 +41,15 @@ export default class DataCollector {
     this.is_initialized = true;
   }
 
+  getData() {
+    // first copy the data
+    let copied_data = [...this.data];
+    // clear the data array
+    this.data = [];
+    // reset the data_ready flag
+    this.data_ready = false;
+    return copied_data;
+  }
   // this method is called during every model step when the initialization is complete and the model is enabled
   logData() {
     if (this._datalog_counter >= this.datalog_interval) {
@@ -45,6 +57,7 @@ export default class DataCollector {
       let data_entry = {
         time: this.model.model_time_total,
       };
+
       this.log_items.forEach((log_item) => {
         let log_label =
           log_item.model + "." + log_item.prim_prop + "." + log_item.sec_prop;
@@ -56,16 +69,14 @@ export default class DataCollector {
               log_item.sec_prop
             ];
         }
-
-        this.data.push(data_entry);
       });
+      this.data.push(data_entry);
     }
     this._datalog_counter += this.model.modeling_stepsize;
 
     if (this._update_counter >= this.update_freq) {
       this._update_counter = 0;
-      console.log(this.data);
-      this.data = [];
+      this.data_ready = true;
     }
     this._update_counter += this.model.modeling_stepsize;
   }

@@ -3,7 +3,8 @@
     <div class="stage" :style="{ display: display }">
       <canvas id="stage"></canvas>
     </div>
-    <q-btn @click="test">test</q-btn>
+    <q-btn @click="test">calculate</q-btn>
+    <q-btn @click="getModelData">getdata</q-btn>
     <q-resize-observer @resize="onResize" />
   </q-page>
 </template>
@@ -33,6 +34,9 @@ export default {
   methods: {
     test() {
       explainModel.calculate(30);
+    },
+    getModelData() {
+      explainModel.getModelData();
     },
     dropComponent() {
       console.log("dropped");

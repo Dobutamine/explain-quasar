@@ -103,6 +103,13 @@ export default class Model {
     });
   }
 
+  getModelData() {
+    this.sendMessage({
+      type: "command",
+      message: "data",
+      payload: [],
+    });
+  }
   sendMessage(message) {
     if (this.modelEngine) {
       this.modelEngine.postMessage(message);
@@ -120,6 +127,9 @@ export default class Model {
             console.log(
               `ModelEngine: error => ${e.data.message} ${e.data.payload}`
             );
+            break;
+          case "data":
+            console.log(e.data.payload);
             break;
         }
       };
