@@ -1,13 +1,13 @@
 <template>
   <div>
     <q-btn @click="test">TEST</q-btn>
-    <div class="chart" :id="chartId">{{ message }}</div>
+    <div class="chart" :id="chartId"></div>
   </div>
 </template>
 
 <script>
 // we have to declare the chart object here otherwise some chart functions won't work!
-let charts = {};
+let chartsXY = {};
 
 import {
   lightningChart,
@@ -23,7 +23,6 @@ export default {
   props: ["points"],
   data() {
     return {
-      message: "tester",
       chartId: "chart",
       lineSeries: null,
       arrayY: [100, 200, 300],
@@ -32,7 +31,7 @@ export default {
   methods: {
     test() {
       this.lineSeries.addArrayY([500]);
-      charts[this.chartId].chartYAxis.setTitle("Changed");
+      chartsXY[this.chartId].chartYAxis.setTitle("Changed");
     },
     createChart() {
       let chart_object = {
@@ -70,11 +69,11 @@ export default {
       this.lineSeries.addArrayY([100, 200, 300]);
 
       // add the chart to the global charts object
-      charts[this.chartId] = chart_object;
+      chartsXY[this.chartId] = chart_object;
     },
   },
   beforeUnmount() {
-    delete charts[this.chartId];
+    delete chartsXY[this.chartId];
     console.log(`Removed chart with id: ${this.chartId} from charts`);
   },
   beforeMount() {
