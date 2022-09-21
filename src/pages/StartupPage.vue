@@ -3,6 +3,7 @@
     <div class="stage" :style="{ display: display }">
       <canvas id="stage"></canvas>
     </div>
+
     <q-btn @click="test">calculate</q-btn>
     <q-btn @click="getModelData">getdata</q-btn>
     <q-resize-observer @resize="onResize" />
@@ -15,7 +16,6 @@ import { PIXI } from "../boot/pixijs";
 import Compartment from "../actors/compartment";
 
 export default {
-  components: {},
   data() {
     return {
       myList: ["First Item", "Second Item", "Third Item"],

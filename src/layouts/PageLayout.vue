@@ -158,7 +158,7 @@ export default {
       this.$router.push("/");
     },
     gotoMyHospital() {
-      this.$router.push("/myhospital");
+      this.$router.push("/charts");
     },
     gotoUser() {
       this.$router.push("/me");

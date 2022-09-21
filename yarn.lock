@@ -10,6 +10,20 @@
     "@jridgewell/gen-mapping" "^0.1.0"
     "@jridgewell/trace-mapping" "^0.3.9"
 
+"@arction/eventer@^1.0.1":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@arction/eventer/-/eventer-1.0.1.tgz#1b11560cf056db03c82d48643f03f28c98379bb4"
+  integrity sha512-/443gMPcZwt+BSH5cy2/sJlYis2zT0IUbllboi/e0Ye4uk58SUloxjMecWjp2sJ7IBCGGpduaE8I73mMQmJGvw==
+
+"@arction/lcjs@^3.4.0":
+  version "3.4.0"
+  resolved "https://registry.yarnpkg.com/@arction/lcjs/-/lcjs-3.4.0.tgz#6afbb401b6a670a36f769b8cb0a9db16fb049663"
+  integrity sha512-L1HVSjcF8wr1SVvSMrNnzBe4kPpupOKXcMIjRv/vE6y/WPyBmVrwXTF/H7KwFRPQZ+xPHQvwFgbN/ktueha3TQ==
+  dependencies:
+    "@arction/eventer" "^1.0.1"
+    earcut "^2.2.2"
+    immutable "^4.0.0-rc.12"
+
 "@babel/code-frame@^7.0.0", "@babel/code-frame@^7.18.6", "@babel/code-frame@^7.8.3":
   version "7.18.6"
   resolved "https://registry.yarnpkg.com/@babel/code-frame/-/code-frame-7.18.6.tgz#3b25d38c89600baa2dcc219edfa88a74eb2c427a"
@@ -2841,7 +2855,7 @@ duplexer@^0.1.2:
   resolved "https://registry.yarnpkg.com/duplexer/-/duplexer-0.1.2.tgz#3abe43aef3835f8ae077d136ddce0f276b0400e6"
   integrity sha512-jtD6YG370ZCIi/9GTaJKQxWTZD045+4R4hTk/x1UyoqadyJ9x9CgSi1RlVDQF8U2sxLLSnFkCaMihqljHIWgMg==
 
-earcut@^2.2.4:
+earcut@^2.2.2, earcut@^2.2.4:
   version "2.2.4"
   resolved "https://registry.yarnpkg.com/earcut/-/earcut-2.2.4.tgz#6d02fd4d68160c114825d06890a92ecaae60343a"
   integrity sha512-/pjZsA1b4RPHbeWZQn66SWS8nZZWLQQ23oE3Eam7aroEFGEvwKAsJfZ9ytiEMycfzXWpca4FA9QIOehf7PocBQ==
@@ -3696,6 +3710,11 @@ ignore@^5.1.9, ignore@^5.2.0:
   version "5.2.0"
   resolved "https://registry.yarnpkg.com/ignore/-/ignore-5.2.0.tgz#6d3bac8fa7fe0d45d9f9be7bac2fc279577e345a"
   integrity sha512-CmxgYGiEPCLhfLnpPp1MoRmifwEIOgjcHXxOBjv7mY96c+eWScsOP9c112ZyLdWHi0FxHjI+4uVhKYp/gcdRmQ==
+
+immutable@^4.0.0-rc.12:
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/immutable/-/immutable-4.1.0.tgz#f795787f0db780183307b9eb2091fcac1f6fafef"
+  integrity sha512-oNkuqVTA8jqG1Q6c+UglTOD1xhC1BtjKI7XkCXRkZHrN5m18/XsnUp8Q89GkQO/z+0WjonSvl0FLhDYftp46nQ==
 
 import-fresh@^3.0.0, import-fresh@^3.1.0, import-fresh@^3.2.1:
   version "3.3.0"
