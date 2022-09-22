@@ -20,6 +20,16 @@ Object.values(models).forEach((model) => available_models.push(model));
 // setup the workers communication handler
 onmessage = (e) => {
   switch (e.data.type) {
+    case "get":
+      switch (e.data.message) {
+        case "data":
+          getModelData();
+          break;
+        case "components":
+          getComponents();
+          break;
+      }
+      break;
     case "command":
       switch (e.data.message) {
         case "init":
@@ -40,9 +50,6 @@ onmessage = (e) => {
           break;
         case "calculate":
           calculate(e.data.payload[0]);
-          break;
-        case "data":
-          getModelData();
           break;
       }
       break;
@@ -75,6 +82,23 @@ function addComponent(component) {
       payload: [],
     });
   }
+}
+
+function getComponents() {
+  let model_structure = {};
+
+  for (const [key, value] of Object.entries(model.components)) {
+    model_structure[key] = { ...value };
+    // delete the model reference
+    delete model_structure[key].model;
+    console.log(value);
+  }
+  //console.log(model_structure);
+  postMessage({
+    type: "comp",
+    message: "",
+    payload: ["timmie"],
+  });
 }
 
 function removeComponent(component_name) {

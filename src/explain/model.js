@@ -8,11 +8,15 @@ export default class Model {
   // declare an object holding the model data coming from the engine
   modelData = [];
 
+  // declare an object holding the model components coming from the engine
+  modelComponents = [];
+
   // declare an object holding the model realtime data coming from the engine
   modelDataRT = [];
 
   // declare the events
   data_event = new CustomEvent("data");
+  comp_event = new CustomEvent("comp");
   status_event = new CustomEvent("status");
   error_event = new CustomEvent("error");
 
@@ -125,18 +129,20 @@ export default class Model {
     });
   }
 
-  getModelData() {
+  getComponents() {
     this.sendMessage({
-      type: "command",
-      message: "data",
+      type: "get",
+      message: "components",
       payload: [],
     });
   }
 
-  sendMessage(message) {
-    if (this.modelEngine) {
-      this.modelEngine.postMessage(message);
-    }
+  getModelData() {
+    this.sendMessage({
+      type: "get",
+      message: "data",
+      payload: [],
+    });
   }
 
   setUpCommChannel() {
@@ -163,14 +169,25 @@ export default class Model {
             break;
           case "data":
             this.modelData = e.data.payload;
-            // raise data event
+            // raise data ready event
             document.dispatchEvent(this.data_event);
+            break;
+          case "comp":
+            this.modelComponents = e.data.payload;
+            // reaise com ready event
+            document.dispatchEvent(this.comp_event);
             break;
           case "rt_data":
             this.modelDataRT = e.data.payload;
             break;
         }
       };
+    }
+  }
+
+  sendMessage(message) {
+    if (this.modelEngine) {
+      this.modelEngine.postMessage(message);
     }
   }
 }

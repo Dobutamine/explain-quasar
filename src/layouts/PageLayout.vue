@@ -141,6 +141,7 @@ export default {
       },
     };
   },
+
   methods: {
     gotoAdmin() {
       this.$router.push("/admin301150");

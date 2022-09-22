@@ -59,11 +59,11 @@ export default class DataCollector {
       };
 
       this.log_items.forEach((log_item) => {
-        let log_label =
-          log_item.model + "." + log_item.prim_prop + "." + log_item.sec_prop;
+        let log_label = log_item.model + "." + log_item.prim_prop;
         data_entry[log_label] =
           this.model.components[log_item.model][log_item.prim_prop];
         if (log_item.sec_prop) {
+          log_label += "." + log_item.sec_prop;
           data_entry[log_label] =
             this.model.components[log_item.model][log_item.prim_prop][
               log_item.sec_prop
