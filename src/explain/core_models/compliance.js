@@ -128,6 +128,6 @@ export class Compliance extends CoreModel {
       this._temp_vol_min = this.vol;
     }
 
-    this._update_counter += this.model.modeling_stepsize;
+    this._update_counter += this._model.modeling_stepsize;
   }
 }

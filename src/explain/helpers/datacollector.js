@@ -15,6 +15,7 @@ export default class DataCollector {
   data_ready = false;
 
   model_data = [];
+  hi_res = false;
 
   log_items = [
     { model: "AA", prim_prop: "pres", sec_prop: "" },
@@ -26,6 +27,36 @@ export default class DataCollector {
     this.model = model_ref;
   }
 
+  setDataloggingResolution(state) {
+    this.hi_res = state;
+    if (this.hi_res) {
+      this.datalog_interval = 0.0005;
+    } else {
+      this.datalog_interval = 0.015;
+    }
+  }
+
+  addToWatcher(model, prim_prop, sec_prop) {
+    // prevent duplicates
+    let found = false;
+    this.log_items.forEach((log_item) => {
+      if (
+        log_item.model === model &&
+        log_item.prim_prop === prim_prop &&
+        log_item.sec_prop === sec_prop
+      ) {
+        found = true;
+      }
+    });
+    if (!found) {
+      this.log_items.push({
+        model: model,
+        prim_prop: prim_prop,
+        sec_prop: sec_prop,
+      });
+    }
+    console.log(this.log_items);
+  }
   modelStep() {
     if (this.is_initialized) {
       if (this.is_enabled) {

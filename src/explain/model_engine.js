@@ -25,8 +25,8 @@ onmessage = (e) => {
         case "data":
           getModelData();
           break;
-        case "components":
-          getComponents();
+        case "state":
+          getModelState();
           break;
       }
       break;
@@ -48,6 +48,12 @@ onmessage = (e) => {
         case "stop":
           stop();
           break;
+        case "datalog_res":
+          setDataloggingResolution(e.data.payload[0]);
+          break;
+        case "watch":
+          watchProperty(e.data.payload);
+          break;
         case "calculate":
           calculate(e.data.payload[0]);
           break;
@@ -55,7 +61,12 @@ onmessage = (e) => {
       break;
   }
 };
-
+function setDataloggingResolution(state) {
+  model.data.setDataloggingResolution(state);
+}
+function watchProperty(prop) {
+  model.data.addToWatcher(prop[0], prop[1], prop[2]);
+}
 function addComponent(component) {
   // check if the model is available in the available model list
   let index = available_models.findIndex(
@@ -84,20 +95,27 @@ function addComponent(component) {
   }
 }
 
-function getComponents() {
+function getModelState() {
   let model_structure = {};
 
-  for (const [key, value] of Object.entries(model.components)) {
-    model_structure[key] = { ...value };
-    // delete the model reference
-    delete model_structure[key].model;
-    console.log(value);
-  }
-  //console.log(model_structure);
+  Object.keys(model.components).forEach((component_name) => {
+    // conditionally copy all properties
+    model_structure[component_name] = {};
+    Object.keys(model.components[component_name]).forEach(
+      (component_property_name) => {
+        // don't copy the properties with an underscore before it because these are local properties of the component.
+        if (Array.from(component_property_name)[0] !== "_") {
+          // copy property
+          model_structure[component_name][component_property_name] =
+            model.components[component_name][component_property_name];
+        }
+      }
+    );
+  });
   postMessage({
-    type: "comp",
+    type: "state",
     message: "",
-    payload: ["timmie"],
+    payload: [model_structure],
   });
 }
 

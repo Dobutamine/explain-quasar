@@ -153,10 +153,10 @@ export class Heart extends CoreModel {
 
     // increase the ecg timers
     // the sa node timer is always running
-    this._sa_node_counter += this.model.modeling_stepsize;
+    this._sa_node_counter += this._model.modeling_stepsize;
     // increase the pq time counter if the counter is running
     if (this._pq_running) {
-      this._pq_time_counter += this.model.modeling_stepsize;
+      this._pq_time_counter += this._model.modeling_stepsize;
       // increase the p wave signal counter
       this._p_wave_signal_counter += 1;
       // build the p-wave
@@ -168,7 +168,7 @@ export class Heart extends CoreModel {
 
     // increase the qrs time counter if the counter is running
     if (this._qrs_running) {
-      this._qrs_time_counter += this.model.modeling_stepsize;
+      this._qrs_time_counter += this._model.modeling_stepsize;
       // increase the qrs wave signal counter
       this._qrs_wave_signal_counter += 1;
       // build the qrs wave
@@ -180,7 +180,7 @@ export class Heart extends CoreModel {
 
     // increase the qt time counter if the counter is running
     if (this._qt_running) {
-      this._qt_time_counter += this.model.modeling_stepsize;
+      this._qt_time_counter += this._model.modeling_stepsize;
       // increase the t wave signal counter
       this._t_wave_signal_counter += 1;
       // build the t-wave
@@ -206,7 +206,7 @@ export class Heart extends CoreModel {
     }
 
     // increase the time counter for measured heart_rate routine
-    this._measured_hr_time_counter += this.model.modeling_stepsize;
+    this._measured_hr_time_counter += this._model.modeling_stepsize;
 
     // increase the activation curve timers
     this._ncc_atrial += 1;
@@ -229,7 +229,7 @@ export class Heart extends CoreModel {
   }
 
   calcVaryingElastanceFactor() {
-    const _t = this.model.modeling_stepsize;
+    const _t = this._model.modeling_stepsize;
     const atrial_duration = this.pq_time;
     const ventricular_duration = this.cqt_time + this.qrs_time;
 
@@ -282,19 +282,19 @@ export class Heart extends CoreModel {
     // transfer the activation factors to the correct time varying elastances
     this.aaf_left_targets.forEach(
       (target) =>
-        (this.model.components[target].varying_elastance_factor = this.aaf)
+        (this._model.components[target].varying_elastance_factor = this.aaf)
     );
     this.aaf_right_targets.forEach(
       (target) =>
-        (this.model.components[target].varying_elastance_factor = this.aaf)
+        (this._model.components[target].varying_elastance_factor = this.aaf)
     );
     this.vaf_left_targets.forEach(
       (target) =>
-        (this.model.components[target].varying_elastance_factor = this.vaf)
+        (this._model.components[target].varying_elastance_factor = this.vaf)
     );
     this.vaf_right_targets.forEach(
       (target) =>
-        (this.model.components[target].varying_elastance_factor = this.vaf)
+        (this._model.components[target].varying_elastance_factor = this.vaf)
     );
   }
 }

@@ -10,8 +10,8 @@ export class Resistor extends CoreModel {
   r_back_fac = 1;
   r_k = 1;
   r_k_fac = 1;
-  comp_from = "";
-  comp_to = "";
+  _comp_from = "";
+  _comp_to = "";
   res = 0;
 
   // define state variables
@@ -29,10 +29,10 @@ export class Resistor extends CoreModel {
 
   initModel() {
     // find the correct compliances/time-varying elastances
-    this.comp_from = this.model.components[this.comp_from];
-    this.comp_to = this.model.components[this.comp_to];
+    this._comp_from = this._model.components[this.comp_from];
+    this._comp_to = this._model.components[this.comp_to];
 
-    if (this.comp_from && this.comp_to) {
+    if (this._comp_from && this._comp_to) {
       this.is_initialized = true;
       // console.log(`Initialized resistor ${this.name}`);
     } else {
@@ -42,8 +42,8 @@ export class Resistor extends CoreModel {
 
   calcModel() {
     // first get the pressures from the components
-    let p1 = this.comp_from.pres;
-    let p2 = this.comp_to.pres;
+    let p1 = this._comp_from.pres;
+    let p2 = this._comp_to.pres;
 
     // calculate the resistance depending on the flow of the previous step!
     let nonlin_fac = this.r_k * this.r_k_fac * Math.abs(this.flow);
@@ -65,17 +65,17 @@ export class Resistor extends CoreModel {
       }
     }
     // now we have the flow in l/sec and we have to convert it to l by multiplying it by the modeling_stepsize to get the volume displacement in this stepsize
-    let dvol = this.flow * this.model.modeling_stepsize;
+    let dvol = this.flow * this._model.modeling_stepsize;
 
     // now update the compliances
     if (dvol > 0) {
-      // positive volume means comp_from loses volume and comp_to gains volume
-      const mb_pos = this.comp_from.volumeOut(dvol);
-      this.comp_to.volumeIn(dvol - mb_pos, this.comp_from);
+      // positive volume means _comp_from loses volume and _comp_to gains volume
+      const mb_pos = this._comp_from.volumeOut(dvol);
+      this._comp_to.volumeIn(dvol - mb_pos, this._comp_from);
     } else {
-      // negative volume means comp_from gains volume and comp_to loses volume
-      const mb_neg = this.comp_to.volumeOut(-dvol);
-      this.comp_from.volumeIn(-dvol - mb_neg, this.comp_to);
+      // negative volume means _comp_from gains volume and _comp_to loses volume
+      const mb_neg = this._comp_to.volumeOut(-dvol);
+      this._comp_from.volumeIn(-dvol - mb_neg, this._comp_to);
     }
   }
 }

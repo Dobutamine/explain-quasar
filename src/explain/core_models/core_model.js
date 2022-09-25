@@ -1,5 +1,5 @@
 export class CoreModel {
-  model = {};
+  _model = {};
   name = "";
   description = "";
   is_enabled = false;
@@ -7,7 +7,7 @@ export class CoreModel {
 
   constructor(args, model_ref) {
     // store a reference to the model object
-    this.model = model_ref;
+    this._model = model_ref;
 
     // process the arguments/parameters
     args.forEach((arg) => {

@@ -71,6 +71,7 @@ export default {
   },
   methods: {
     async logInUser() {
+      this.$router.push("/start");
       // get the user login data
       let response = await fetch(this.apiAddress, {
         method: "POST",

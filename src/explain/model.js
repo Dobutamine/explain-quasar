@@ -9,14 +9,14 @@ export default class Model {
   modelData = [];
 
   // declare an object holding the model components coming from the engine
-  modelComponents = [];
+  modelState = [];
 
   // declare an object holding the model realtime data coming from the engine
   modelDataRT = [];
 
   // declare the events
   data_event = new CustomEvent("data");
-  comp_event = new CustomEvent("comp");
+  state_event = new CustomEvent("state");
   status_event = new CustomEvent("status");
   error_event = new CustomEvent("error");
 
@@ -113,6 +113,22 @@ export default class Model {
     // load a saved model state
   }
 
+  watchModelProperty(model, prim_prop, sec_prop) {
+    this.sendMessage({
+      type: "command",
+      message: "watch",
+      payload: [model, prim_prop, sec_prop],
+    });
+  }
+
+  setDataloggingResolution(state) {
+    this.sendMessage({
+      type: "command",
+      message: "datalog_res",
+      payload: [state],
+    });
+  }
+
   start() {
     // start realtime model
   }
@@ -129,10 +145,10 @@ export default class Model {
     });
   }
 
-  getComponents() {
+  getModelState() {
     this.sendMessage({
       type: "get",
-      message: "components",
+      message: "state",
       payload: [],
     });
   }
@@ -172,10 +188,10 @@ export default class Model {
             // raise data ready event
             document.dispatchEvent(this.data_event);
             break;
-          case "comp":
-            this.modelComponents = e.data.payload;
+          case "state":
+            this.modelState = e.data.payload[0];
             // reaise com ready event
-            document.dispatchEvent(this.comp_event);
+            document.dispatchEvent(this.state_event);
             break;
           case "rt_data":
             this.modelDataRT = e.data.payload;

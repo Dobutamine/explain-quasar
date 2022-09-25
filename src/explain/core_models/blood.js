@@ -19,10 +19,10 @@ export class Blood extends CoreModel {
 
   initModel() {
     // set the compounds on the  component types which
-    for (let component in this.model.components) {
-      if (this.model.components[component].content === "blood") {
+    for (let component in this._model.components) {
+      if (this._model.components[component].content === "blood") {
         // set the correct compounds on the component containing blood
-        this.model.components[component]["compounds"] = { ...this.compounds };
+        this._model.components[component]["compounds"] = { ...this.compounds };
       }
     }
     this.is_initialized = true;

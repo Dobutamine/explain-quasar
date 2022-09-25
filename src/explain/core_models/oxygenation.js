@@ -2,7 +2,7 @@ import { CoreModel } from "./core_model";
 
 export class Oxygenation extends CoreModel {
   // define an object holding the wasm module and wasm memory
-  oxy_cpp = {
+  _oxy_cpp = {
     calculate: {},
     data: {},
   };
@@ -30,9 +30,9 @@ export class Oxygenation extends CoreModel {
     // load the wasm module
     WebAssembly.instantiateStreaming(fetch(wasm_path)).then((wasm) => {
       // store the calculate function of the c++ module in an js object for easy access
-      this.oxy_cpp.calculate = wasm.instance.exports.calculate;
+      this._oxy_cpp.calculate = wasm.instance.exports.calculate;
       // store a reference to the ArrayBuffer of the memory of the c++ module
-      this.oxy_cpp.data = new Float64Array(
+      this._oxy_cpp.data = new Float64Array(
         wasm.instance.exports.memory.buffer,
         wasm.instance.exports.getMemAddress(),
         2
@@ -40,7 +40,7 @@ export class Oxygenation extends CoreModel {
 
       // set the oxygenation object on the components
       this.components.forEach((component_name) => {
-        this.model.components[component_name]["oxygenation"] = {
+        this._model.components[component_name]["oxygenation"] = {
           po2: 100,
           so2: 1.0,
         };
@@ -56,21 +56,21 @@ export class Oxygenation extends CoreModel {
   calcModel() {
     this.components.forEach((component_name) => {
       // get the component from the model
-      let component = this.model.components[component_name];
+      let component = this._model.components[component_name];
 
       // get the properties of the component (double _to2, double _dpg, double _hemoglobin, double _be, double _temp)
       let to2 = component.compounds.to2.conc;
       let dpg = component.compounds.dpg.conc;
       let hb = component.compounds.hemoglobin.conc;
       let be = component.acidbase.be;
-      let temp = this.model.components.metabolism.body_temp;
+      let temp = this._model.components.metabolism.body_temp;
 
       // calculate the po2 and so2 using the wasm module
-      this.oxy_cpp.calculate(to2, dpg, hb, be, temp);
+      this._oxy_cpp.calculate(to2, dpg, hb, be, temp);
 
       // set the results on the component from the wasm memory
-      component.oxygenation.po2 = this.oxy_cpp.data[0];
-      component.oxygenation.so2 = this.oxy_cpp.data[1];
+      component.oxygenation.po2 = this._oxy_cpp.data[0];
+      component.oxygenation.so2 = this._oxy_cpp.data[1];
     });
   }
 }

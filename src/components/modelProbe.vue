@@ -1,7 +1,121 @@
 <template>
   <div>
     <div class="chart" :id="chartId"></div>
-    <q-btn @click="calculate">CALCULATE</q-btn>
+    <div class="row">
+      <q-btn class="col-1 q-pa-sm q-ma-sm" size="sm" dense @click="calculate"
+        >CALCULATE</q-btn
+      >
+      <q-input
+        class="col-1"
+        dense
+        stack-label
+        label="numer of seconds"
+        v-model="number_of_seconds"
+        type="number"
+      >
+      </q-input>
+      <q-toggle
+        class="col-1 q-pa-sm q-ma-sm"
+        size="sm"
+        v-model="hiresLogging"
+        dense
+        @click="setDataloggingResolution"
+        >Hires</q-toggle
+      >
+      <q-toggle
+        class="col-2 q-pa-sm q-ma-sm"
+        size="sm"
+        v-model="autoscale"
+        dense
+        @click="autoscaling"
+        >Autoscale</q-toggle
+      >
+      <q-input
+        v-if="!autoscale"
+        class="col-1"
+        dense
+        stack-label
+        label="y min"
+        v-model="y_min"
+        type="number"
+        @click="setScale"
+      >
+      </q-input>
+      <q-input
+        v-if="!autoscale"
+        class="col-1"
+        dense
+        stack-label
+        label="y max"
+        v-model="y_max"
+        type="number"
+        @click="setScale"
+      >
+      </q-input>
+    </div>
+
+    <div class="row">
+      <q-select
+        class="col-1 q-ma-sm"
+        size="sm"
+        stack-label
+        dense
+        @update:model-value="selectComponent1"
+        v-model="selected_component_name1"
+        :options="component_names"
+        >component</q-select
+      >
+      <q-select
+        class="col-1 q-ma-sm"
+        size="sm"
+        stack-label
+        dense
+        @update:model-value="selectPrimProp1"
+        v-model="selected_prim_prop_name1"
+        :options="prim_prop_names1"
+        >property</q-select
+      >
+      <q-select
+        class="col-1 q-ma-sm"
+        size="sm"
+        stack-label
+        dense
+        v-if="sec_prop_visible1"
+        v-model="selected_sec_prop_name1"
+        :options="sec_prop_names1"
+        >property</q-select
+      >
+      <q-select
+        class="col-1 q-ma-sm"
+        size="sm"
+        stack-label
+        dense
+        @update:model-value="selectComponent2"
+        v-model="selected_component_name2"
+        :options="component_names"
+        >component</q-select
+      >
+      <q-select
+        class="col-1 q-ma-sm"
+        size="sm"
+        stack-label
+        dense
+        @update:model-value="selectPrimProp2"
+        v-model="selected_prim_prop_name2"
+        :options="prim_prop_names2"
+        >property</q-select
+      >
+      <q-select
+        class="col-1 q-ma-sm"
+        size="sm"
+        stack-label
+        dense
+        v-if="sec_prop_visible2"
+        v-model="selected_sec_prop_name2"
+        :options="sec_prop_names2"
+        >property</q-select
+      >
+    </div>
   </div>
 </template>
 
@@ -32,6 +146,47 @@ export default {
   },
   data() {
     return {
+      y_min: 0,
+      y_max: 100,
+      autoscale: true,
+      number_of_seconds: 5,
+      hiresLogging: false,
+      component_names: [],
+      selected_component_name1: "",
+      selected_prim_prop_name1: "",
+      selected_sec_prop_name1: "",
+      prim_prop_visible1: false,
+      sec_prop_visible1: false,
+      selected_component_name2: "",
+      selected_prim_prop_name2: "",
+      selected_sec_prop_name2: "",
+      prim_prop_visible2: false,
+      sec_prop_visible2: false,
+      selected_component_name3: "",
+      selected_prim_prop_name3: "",
+      selected_sec_prop_name3: "",
+      prim_prop_visible3: false,
+      sec_prop_visible3: false,
+      selected_component_name4: "",
+      selected_prim_prop_name4: "",
+      selected_sec_prop_name4: "",
+      prim_prop_visible4: false,
+      sec_prop_visible4: false,
+      selected_component_name5: "",
+      selected_prim_prop_name5: "",
+      selected_sec_prop_name5: "",
+      prim_prop_visible5: false,
+      sec_prop_visible5: false,
+      prim_prop_names1: [],
+      sec_prop_names1: [],
+      prim_prop_names2: [],
+      sec_prop_names2: [],
+      prim_prop_names3: [],
+      sec_prop_names3: [],
+      prim_prop_names4: [],
+      sec_prop_names4: [],
+      prim_prop_names5: [],
+      sec_prop_names5: [],
       chartId: "chart",
       chartData: [],
       autoscaleX: false,
@@ -42,33 +197,265 @@ export default {
       xLabel: "time",
       width: "100%",
       height: "300px",
-      minX: 0,
-      maxX: 100,
-      minY: 0,
-      maxY: 100,
+      first_run: true,
+      lineSeries1: null,
+      lineSeries2: null,
     };
   },
   methods: {
-    compUpdate() {
-      console.log(explainModel.modelComponents);
+    setScale() {
+      //chart_object.chartXAxis.setScrollStrategy(AxisScrollStrategies.Numeric);
+      chartsXY[this.chartId].chartYAxis.setInterval(this.y_min, this.y_max);
+    },
+    autoscaling() {
+      if (this.autoscale) {
+        chartsXY[this.chartId].chartYAxis.fit(true);
+      }
+    },
+    setDataloggingResolution() {
+      explainModel.setDataloggingResolution(this.hiresLogging);
+    },
+    selectPrimProp1(selection) {
+      // reset the secondary property names
+      this.sec_prop_names1 = [];
+      // clear the currently selected secundary prop name
+      this.selected_sec_prop_name1 = "";
+      // find any secondary property names
+      Object.keys(
+        explainModel.modelState[this.selected_component_name1][selection]
+      ).forEach((key) => {
+        if (
+          typeof explainModel.modelState[this.selected_component_name1][
+            selection
+          ] !== "string" &&
+          typeof explainModel.modelState[this.selected_component_name1][
+            selection
+          ] !== "boolean"
+        ) {
+          // add the property to the list
+          this.sec_prop_names1.push(key);
+        }
+      });
+      // sort the list of any items are on it
+      if (this.sec_prop_names1.length > 0) {
+        // make the secondary property visible
+        this.sec_prop_visible1 = true;
+        // sort th elist
+        this.sec_prop_names1.sort();
+      } else {
+        // hide the secundary property
+        this.sec_prop_visible1 = false;
+      }
+    },
+    selectPrimProp2(selection) {
+      // reset the secondary property names
+      this.sec_prop_names2 = [];
+      // clear the currently selected secundary prop name
+      this.selected_sec_prop_name2 = "";
+      // find any secondary property names
+      Object.keys(
+        explainModel.modelState[this.selected_component_name2][selection]
+      ).forEach((key) => {
+        if (
+          typeof explainModel.modelState[this.selected_component_name2][
+            selection
+          ] !== "string" &&
+          typeof explainModel.modelState[this.selected_component_name2][
+            selection
+          ] !== "boolean"
+        ) {
+          // add the property to the list
+          this.sec_prop_names2.push(key);
+        }
+      });
+      // sort the list of any items are on it
+      if (this.sec_prop_names2.length > 0) {
+        // make the secondary property visible
+        this.sec_prop_visible2 = true;
+        // sort th elist
+        this.sec_prop_names2.sort();
+      } else {
+        // hide the secundary property
+        this.sec_prop_visible2 = false;
+      }
+    },
+    selectComponent1(selection) {
+      // component1 has been selected, clear the primary and secundary property lists
+      this.prim_prop_names1 = [];
+      this.sec_prop_names1 = [];
+      // component1 has been selected, clear the primary and secundary selected properties
+      this.selected_prim_prop_name1 = "";
+      this.selected_sec_prop_name1 = "";
+      // hide secondary properties as we don't know if they exist yet
+      this.sec_prop_visible1 = false;
+      // show the primary properties as we selected a component
+      this.prim_prop_visible1 = true;
+      // find the primary properties of the selected component
+      Object.keys(explainModel.modelState[selection]).forEach((key) => {
+        if (
+          typeof explainModel.modelState[selection][key] !== "string" &&
+          typeof explainModel.modelState[selection][key] !== "boolean"
+        ) {
+          this.prim_prop_names1.push(key);
+        }
+      });
+      // if the propery list is not empty then sort the list alphabetically
+      if (this.prim_prop_names1.length > 0) {
+        this.prim_prop_names1.sort();
+      }
+    },
+    selectComponent2(selection) {
+      // component1 has been selected, clear the primary and secundary property lists
+      this.prim_prop_names2 = [];
+      this.sec_prop_names2 = [];
+      // component1 has been selected, clear the primary and secundary selected properties
+      this.selected_prim_prop_name2 = "";
+      this.selected_sec_prop_name2 = "";
+      // hide secondary properties as we don't know if they exist yet
+      this.sec_prop_visible2 = false;
+      // show the primary properties as we selected a component
+      this.prim_prop_visible2 = true;
+      // find the primary properties of the selected component
+      Object.keys(explainModel.modelState[selection]).forEach((key) => {
+        if (
+          typeof explainModel.modelState[selection][key] !== "string" &&
+          typeof explainModel.modelState[selection][key] !== "boolean"
+        ) {
+          this.prim_prop_names2.push(key);
+        }
+      });
+      // if the propery list is not empty then sort the list alphabetically
+      if (this.prim_prop_names2.length > 0) {
+        this.prim_prop_names2.sort();
+      }
+    },
+    stateUpdate() {
+      console.log("Model state object updated!");
+      // reset the component names as the model state is updated
+      this.component_names = [];
+      // read all model components
+      Object.keys(explainModel.modelState).forEach((key) => {
+        this.component_names.push(key);
+      });
+      // sort the model components alphabetically
+      this.component_names.sort();
+    },
+    clearPrimaryProperties() {
+      // hide all primary properties
+      this.prim_prop_visible1 = false;
+      this.prim_prop_visible2 = false;
+      this.prim_prop_visible3 = false;
+      this.prim_prop_visible4 = false;
+      this.prim_prop_visible5 = false;
+    },
+    clearSecondaryProperties() {
+      // hide all secundary properties
+      this.sec_prop_visible1 = false;
+      this.sec_prop_visible2 = false;
+      this.sec_prop_visible3 = false;
+      this.sec_prop_visible4 = false;
+      this.sec_prop_visible5 = false;
     },
     errorUpdate() {
       console.log(explainModel.errorMessage);
     },
     dataUpdate() {
-      this.chartData = [];
-      this.lineSeries.clear();
+      this.chartData1 = [];
+      this.chartData2 = [];
+      this.lineSeries1.clear();
+      this.lineSeries2.clear();
+
+      let prop1 = "";
+      let postFix1 = "";
+      let chart1_enabled = false;
+      if (this.selected_component_name1 && this.selected_prim_prop_name1) {
+        chart1_enabled = true;
+        prop1 =
+          this.selected_component_name1 + "." + this.selected_prim_prop_name1;
+        if (this.selected_sec_prop_name1) {
+          prop1 += "." + this.selected_sec_prop_name1;
+        }
+
+        postFix1 = "";
+        if (this.selected_prim_prop_name1 === "compounds") {
+          postFix1 = "conc";
+        }
+      }
+
+      let prop2 = "";
+      let postFix2 = "";
+      let chart2_enabled = false;
+      if (this.selected_component_name2 && this.selected_prim_prop_name2) {
+        chart2_enabled = true;
+        prop2 =
+          this.selected_component_name2 + "." + this.selected_prim_prop_name2;
+        if (this.selected_sec_prop_name2) {
+          prop2 += "." + this.selected_sec_prop_name2;
+        }
+
+        postFix2 = "";
+        if (this.selected_prim_prop_name2 === "compounds") {
+          postFix2 = "conc";
+        }
+      }
+
       explainModel.modelData.forEach((data) => {
-        this.chartData.push({ x: data.time, y: data["AA.pres"] });
+        if (chart1_enabled) {
+          let y1 = parseFloat(data[prop1]);
+          if (postFix1) {
+            y1 = parseFloat(data[prop1][postFix1]);
+          }
+
+          this.chartData1.push({
+            x: data.time,
+            y: y1,
+          });
+        }
+
+        if (chart2_enabled) {
+          let y2 = parseFloat(data[prop2]);
+          if (postFix2) {
+            y2 = parseFloat(data[prop2][postFix2]);
+          }
+
+          this.chartData2.push({
+            x: data.time,
+            y: y2,
+          });
+        }
       });
-      this.lineSeries.add(this.chartData);
+
+      if (chart1_enabled) {
+        this.lineSeries1.add(this.chartData1);
+      }
+      if (chart2_enabled) {
+        this.lineSeries2.add(this.chartData2);
+      }
     },
     statusUpdate() {
       console.log(explainModel.statusMessage);
     },
     calculate() {
-      explainModel.calculate(5);
-      explainModel.getComponents();
+      if (this.selectComponent1 && this.selected_prim_prop_name1) {
+        explainModel.watchModelProperty(
+          this.selected_component_name1,
+          this.selected_prim_prop_name1,
+          this.selected_sec_prop_name1
+        );
+      }
+
+      if (this.selectComponent2 && this.selected_prim_prop_name2) {
+        explainModel.watchModelProperty(
+          this.selected_component_name2,
+          this.selected_prim_prop_name2,
+          this.selected_sec_prop_name2
+        );
+      }
+      explainModel.calculate(parseInt(this.number_of_seconds));
+      if (this.first_run) {
+        explainModel.getModelState();
+        this.first_run = false;
+      }
     },
     createChart() {
       let chart_object = {
@@ -140,12 +527,20 @@ export default {
       // https://lightningchart.com/lightningchart-js-api-documentation/v3.4.0/classes/axis.html
 
       //   dummy data
-      this.lineSeries = chart_object.chart
+      this.lineSeries1 = chart_object.chart
         .addLineSeries()
         .setName(this.lineTitle);
-      this.lineSeries.setStrokeStyle((style) => style.setThickness(2));
-      this.lineSeries.setStrokeStyle((style) =>
+      this.lineSeries1.setStrokeStyle((style) => style.setThickness(2));
+      this.lineSeries1.setStrokeStyle((style) =>
         style.setFillStyle(new SolidFill({ color: ColorRGBA(200, 0, 0) }))
+      );
+
+      this.lineSeries2 = chart_object.chart
+        .addLineSeries()
+        .setName(this.lineTitle);
+      this.lineSeries2.setStrokeStyle((style) => style.setThickness(2));
+      this.lineSeries2.setStrokeStyle((style) =>
+        style.setFillStyle(new SolidFill({ color: ColorRGBA(0, 200, 0) }))
       );
       //this.lineSeries.add(this.points);
 
@@ -160,7 +555,7 @@ export default {
     document.removeEventListener("data", this.dataUpdate);
     document.removeEventListener("error", this.errorUpdate);
     document.removeEventListener("status", this.statusUpdate);
-    document.removeEventListener("comp", this.compUpdate);
+    document.removeEventListener("state", this.stateUpdate);
   },
   beforeMount() {
     // generate a unique chartID
@@ -170,10 +565,13 @@ export default {
     // create the chart
     this.createChart();
 
+    // get the model state
+    explainModel.getModelState();
+
     document.addEventListener("data", this.dataUpdate);
     document.addEventListener("status", this.statusUpdate);
     document.addEventListener("error", this.errorUpdate);
-    document.addEventListener("comp", this.compUpdate);
+    document.addEventListener("state", this.stateUpdate);
   },
 };
 </script>
