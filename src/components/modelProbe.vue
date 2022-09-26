@@ -1,6 +1,89 @@
 <template>
   <div>
     <div class="chart" :id="chartId"></div>
+    <div class="row q-mt-sm">
+      <div class="col">
+        <div class="q-gutter-es row gutter justify-center">
+          <q-select
+            label-color="red-6"
+            v-model="selected_component_name1"
+            :options="component_names"
+            hide-bottom-space
+            filled
+            dense
+            square
+            label="y1"
+            style="width: 100px; font-size: 12px"
+            @update:model-value="selectComponent1"
+          />
+          <q-select
+            v-if="prim_prop_visible1"
+            label-color="red-6"
+            v-model="selected_prim_prop_name1"
+            :options="prim_prop_names1"
+            hide-bottom-space
+            filled
+            dense
+            square
+            label="prop1"
+            style="width: 100px; font-size: 12px"
+            @update:model-value="selectPrimProp1"
+          />
+          <q-select
+            v-if="sec_prop_visible1"
+            label-color="red-6"
+            v-model="selected_sec_prop_name1"
+            :options="sec_prop_names1"
+            hide-bottom-space
+            filled
+            dense
+            square
+            label="prop2"
+            style="width: 100px; font-size: 12px"
+          />
+          <q-select
+            class="q-ml-md"
+            label-color="green-6"
+            v-model="selected_component_name2"
+            :options="component_names"
+            hide-bottom-space
+            filled
+            dense
+            square
+            label="y2"
+            style="width: 100px; font-size: 12px"
+            @update:model-value="selectComponent2"
+          />
+
+          <q-select
+            v-if="prim_prop_visible2"
+            label-color="green-6"
+            v-model="selected_prim_prop_name2"
+            :options="prim_prop_names2"
+            hide-bottom-space
+            filled
+            dense
+            square
+            label="prop1"
+            style="width: 100px; font-size: 12px"
+            @update:model-value="selectPrimProp2"
+          />
+          <q-select
+            v-if="sec_prop_visible2"
+            label-color="green-6"
+            v-model="selected_sec_prop_name2"
+            :options="sec_prop_names2"
+            hide-bottom-space
+            filled
+            dense
+            square
+            label="prop2"
+            style="width: 100px; font-size: 12px"
+          />
+        </div>
+      </div>
+    </div>
+
     <div class="row">
       <q-btn class="col-1 q-pa-sm q-ma-sm" size="sm" dense @click="calculate"
         >CALCULATE</q-btn
@@ -52,69 +135,6 @@
         @click="setScale"
       >
       </q-input>
-    </div>
-
-    <div class="row">
-      <q-select
-        class="col-1 q-ma-sm"
-        size="sm"
-        stack-label
-        dense
-        @update:model-value="selectComponent1"
-        v-model="selected_component_name1"
-        :options="component_names"
-        >component</q-select
-      >
-      <q-select
-        class="col-1 q-ma-sm"
-        size="sm"
-        stack-label
-        dense
-        @update:model-value="selectPrimProp1"
-        v-model="selected_prim_prop_name1"
-        :options="prim_prop_names1"
-        >property</q-select
-      >
-      <q-select
-        class="col-1 q-ma-sm"
-        size="sm"
-        stack-label
-        dense
-        v-if="sec_prop_visible1"
-        v-model="selected_sec_prop_name1"
-        :options="sec_prop_names1"
-        >property</q-select
-      >
-      <q-select
-        class="col-1 q-ma-sm"
-        size="sm"
-        stack-label
-        dense
-        @update:model-value="selectComponent2"
-        v-model="selected_component_name2"
-        :options="component_names"
-        >component</q-select
-      >
-      <q-select
-        class="col-1 q-ma-sm"
-        size="sm"
-        stack-label
-        dense
-        @update:model-value="selectPrimProp2"
-        v-model="selected_prim_prop_name2"
-        :options="prim_prop_names2"
-        >property</q-select
-      >
-      <q-select
-        class="col-1 q-ma-sm"
-        size="sm"
-        stack-label
-        dense
-        v-if="sec_prop_visible2"
-        v-model="selected_sec_prop_name2"
-        :options="sec_prop_names2"
-        >property</q-select
-      >
     </div>
   </div>
 </template>
@@ -288,20 +308,24 @@ export default {
       this.selected_sec_prop_name1 = "";
       // hide secondary properties as we don't know if they exist yet
       this.sec_prop_visible1 = false;
-      // show the primary properties as we selected a component
-      this.prim_prop_visible1 = true;
+      this.prim_prop_visible1 = false;
+
       // find the primary properties of the selected component
-      Object.keys(explainModel.modelState[selection]).forEach((key) => {
-        if (
-          typeof explainModel.modelState[selection][key] !== "string" &&
-          typeof explainModel.modelState[selection][key] !== "boolean"
-        ) {
-          this.prim_prop_names1.push(key);
+      if (selection) {
+        Object.keys(explainModel.modelState[selection]).forEach((key) => {
+          if (
+            typeof explainModel.modelState[selection][key] !== "string" &&
+            typeof explainModel.modelState[selection][key] !== "boolean"
+          ) {
+            this.prim_prop_names1.push(key);
+          }
+        });
+        // if the propery list is not empty then sort the list alphabetically
+        if (this.prim_prop_names1.length > 0) {
+          this.prim_prop_names1.sort();
+          // show the primary properties as we selected a component
+          this.prim_prop_visible1 = true;
         }
-      });
-      // if the propery list is not empty then sort the list alphabetically
-      if (this.prim_prop_names1.length > 0) {
-        this.prim_prop_names1.sort();
       }
     },
     selectComponent2(selection) {
@@ -314,25 +338,29 @@ export default {
       // hide secondary properties as we don't know if they exist yet
       this.sec_prop_visible2 = false;
       // show the primary properties as we selected a component
-      this.prim_prop_visible2 = true;
-      // find the primary properties of the selected component
-      Object.keys(explainModel.modelState[selection]).forEach((key) => {
-        if (
-          typeof explainModel.modelState[selection][key] !== "string" &&
-          typeof explainModel.modelState[selection][key] !== "boolean"
-        ) {
-          this.prim_prop_names2.push(key);
+      this.prim_prop_visible2 = false;
+
+      if (selection) {
+        // find the primary properties of the selected component
+        Object.keys(explainModel.modelState[selection]).forEach((key) => {
+          if (
+            typeof explainModel.modelState[selection][key] !== "string" &&
+            typeof explainModel.modelState[selection][key] !== "boolean"
+          ) {
+            this.prim_prop_names2.push(key);
+          }
+        });
+        // if the propery list is not empty then sort the list alphabetically
+        if (this.prim_prop_names2.length > 0) {
+          this.prim_prop_names2.sort();
+          this.prim_prop_visible2 = true;
         }
-      });
-      // if the propery list is not empty then sort the list alphabetically
-      if (this.prim_prop_names2.length > 0) {
-        this.prim_prop_names2.sort();
       }
     },
     stateUpdate() {
       console.log("Model state object updated!");
       // reset the component names as the model state is updated
-      this.component_names = [];
+      this.component_names = [""];
       // read all model components
       Object.keys(explainModel.modelState).forEach((key) => {
         this.component_names.push(key);
@@ -581,5 +609,6 @@ export default {
   background: black;
   width: 100%;
   height: 300px;
+  align-self: flex-start;
 }
 </style>
