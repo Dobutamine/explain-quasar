@@ -1,6 +1,7 @@
 <template>
   <div>
-    <div class="row q-mt-md">
+    <q-separator class="q-mt-sm" size="2px"></q-separator>
+    <div class="row q-mt-sm">
       <div class="col">
         <div class="q-gutter-md row justify-center">
           <q-select
@@ -217,6 +218,7 @@
         </div>
       </div>
     </div>
+    <q-separator class="q-mt-sm" size="2px"></q-separator>
   </div>
 </template>
 
@@ -318,7 +320,6 @@ export default {
         chartsXY[this.chartId].chartYAxis.setScrollStrategy(
           AxisScrollStrategies.fitting
         );
-        console.log("autoscale on");
       } else {
         chartsXY[this.chartId].chartYAxis.setScrollStrategy(
           AxisScrollStrategies.Numeric
@@ -513,7 +514,6 @@ export default {
       }
     },
     stateUpdate() {
-      console.log("Model state object updated!");
       // reset the component names as the model state is updated
       this.component_names = [""];
       // read all model components
@@ -539,9 +539,7 @@ export default {
       this.sec_prop_visible4 = false;
       this.sec_prop_visible5 = false;
     },
-    errorUpdate() {
-      console.log(explainModel.errorMessage);
-    },
+    errorUpdate() {},
     dataUpdate() {
       this.chartData1 = [];
       this.chartData2 = [];
@@ -655,9 +653,7 @@ export default {
         this.lineSeries3.add(this.chartData3);
       }
     },
-    statusUpdate() {
-      console.log(explainModel.statusMessage);
-    },
+    statusUpdate() {},
     calculate() {
       if (this.selected_component_name1 && this.selected_prim_prop_name1) {
         explainModel.watchModelProperty(
@@ -826,7 +822,7 @@ export default {
 .chart {
   background: black;
   width: 100%;
-  height: 300px;
+  height: 250px;
   align-self: flex-start;
 }
 </style>

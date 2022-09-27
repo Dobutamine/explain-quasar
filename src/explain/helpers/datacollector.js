@@ -9,7 +9,7 @@ export default class DataCollector {
   update_freq = 1.0;
   _update_counter = 0;
 
-  datalog_interval = 0.015;
+  datalog_interval = 0.01;
   _datalog_counter = 0;
 
   data_ready = false;
@@ -30,9 +30,9 @@ export default class DataCollector {
   setDataloggingResolution(state) {
     this.hi_res = state;
     if (this.hi_res) {
-      this.datalog_interval = 0.0005;
+      this.datalog_interval = 0.001;
     } else {
-      this.datalog_interval = 0.015;
+      this.datalog_interval = 0.01;
     }
   }
 

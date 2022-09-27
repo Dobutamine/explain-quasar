@@ -1,8 +1,8 @@
 .
 <template>
   <q-page>
-    <div>
-      <ModelProbe></ModelProbe>
+    <div class="row">
+      <ModelProbe class="col"></ModelProbe>
     </div>
   </q-page>
 </template>
