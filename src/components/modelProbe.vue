@@ -11,7 +11,6 @@
             hide-bottom-space
             filled
             dense
-            square
             label="y1"
             style="width: 100px; font-size: 12px"
             @update:model-value="selectComponent1"
@@ -24,7 +23,6 @@
             hide-bottom-space
             filled
             dense
-            square
             label="prop1"
             style="width: 100px; font-size: 12px"
             @update:model-value="selectPrimProp1"
@@ -80,61 +78,132 @@
             label="prop2"
             style="width: 100px; font-size: 12px"
           />
+
+          <q-select
+            class="q-ml-md"
+            label-color="blue-6"
+            v-model="selected_component_name3"
+            :options="component_names"
+            hide-bottom-space
+            filled
+            dense
+            square
+            label="y3"
+            style="width: 100px; font-size: 12px"
+            @update:model-value="selectComponent3"
+          />
+
+          <q-select
+            v-if="prim_prop_visible3"
+            label-color="blue-6"
+            v-model="selected_prim_prop_name3"
+            :options="prim_prop_names3"
+            hide-bottom-space
+            filled
+            dense
+            square
+            label="prop1"
+            style="width: 100px; font-size: 12px"
+            @update:model-value="selectPrimProp3"
+          />
+          <q-select
+            v-if="sec_prop_visible3"
+            label-color="blue-6"
+            v-model="selected_sec_prop_name3"
+            :options="sec_prop_names3"
+            hide-bottom-space
+            filled
+            dense
+            square
+            label="prop2"
+            style="width: 100px; font-size: 12px"
+          />
         </div>
       </div>
     </div>
 
     <div class="row">
-      <q-btn class="col-1 q-pa-sm q-ma-sm" size="sm" dense @click="calculate"
-        >CALCULATE</q-btn
-      >
-      <q-input
-        class="col-1"
-        dense
-        stack-label
-        label="numer of seconds"
-        v-model="number_of_seconds"
-        type="number"
-      >
-      </q-input>
-      <q-toggle
-        class="col-1 q-pa-sm q-ma-sm"
-        size="sm"
-        v-model="hiresLogging"
-        dense
-        @click="setDataloggingResolution"
-        >Hires</q-toggle
-      >
-      <q-toggle
-        class="col-2 q-pa-sm q-ma-sm"
-        size="sm"
-        v-model="autoscale"
-        dense
-        @click="autoscaling"
-        >Autoscale</q-toggle
-      >
-      <q-input
-        v-if="!autoscale"
-        class="col-1"
-        dense
-        stack-label
-        label="y min"
-        v-model="y_min"
-        type="number"
-        @click="setScale"
-      >
-      </q-input>
-      <q-input
-        v-if="!autoscale"
-        class="col-1"
-        dense
-        stack-label
-        label="y max"
-        v-model="y_max"
-        type="number"
-        @click="setScale"
-      >
-      </q-input>
+      <div class="col">
+        <div class="q-gutter-lg row gutter q-ma-xs justify-center">
+          <q-checkbox
+            v-model="show_summary"
+            dense
+            label="summary"
+            style="font-size: 12px"
+          />
+          <q-checkbox
+            v-model="autoscale"
+            dense
+            label="autoscale"
+            @update:model-value="autoscaling"
+            style="font-size: 12px"
+          />
+          <q-input
+            v-if="!autoscale"
+            v-model.number="y_min"
+            type="number"
+            @update:model-value="autoscaling"
+            label="min"
+            filled
+            dense
+            hide-bottom-space
+            style="width: 100px; font-size: 12px"
+          />
+          <q-input
+            v-if="!autoscale"
+            v-model.number="y_max"
+            type="number"
+            @update:model-value="autoscaling"
+            label="max"
+            filled
+            dense
+            hide-bottom-space
+            style="width: 100px; font-size: 12px"
+          />
+          <q-checkbox
+            v-model="hiresLogging"
+            dense
+            label="hi-res"
+            @update:model-value="setDataloggingResolution"
+            style="font-size: 12px"
+          />
+          <q-checkbox
+            v-model="scaling"
+            dense
+            label="multipliers"
+            style="font-size: 12px"
+          />
+          <q-input
+            v-if="scaling"
+            v-model.number="chart1_factor"
+            type="number"
+            label="y1"
+            filled
+            dense
+            style="width: 75px; font-size: 10px"
+          />
+          <q-input
+            v-if="scaling"
+            v-model.number="chart2_factor"
+            type="number"
+            label="y2"
+            filled
+            dense
+            style="width: 75px; font-size: 10px"
+          />
+          <q-input
+            v-model.number="number_of_seconds"
+            type="number"
+            label="frame(s)"
+            filled
+            dense
+            style="width: 75px; font-size: 10px"
+          />
+          <div class="row">
+            <q-btn outline size="sm" @click="calculate">CALCULATE</q-btn>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -166,9 +235,15 @@ export default {
   },
   data() {
     return {
+      show_summary: false,
+      export_file_name: "",
       y_min: 0,
       y_max: 100,
       autoscale: true,
+      scaling: false,
+      chart1_factor: 1.0,
+      chart2_factor: 1.0,
+      rt_frame: 1.0,
       number_of_seconds: 5,
       hiresLogging: false,
       component_names: [],
@@ -223,13 +298,19 @@ export default {
     };
   },
   methods: {
-    setScale() {
-      //chart_object.chartXAxis.setScrollStrategy(AxisScrollStrategies.Numeric);
-      chartsXY[this.chartId].chartYAxis.setInterval(this.y_min, this.y_max);
-    },
+    exportData() {},
+
     autoscaling() {
       if (this.autoscale) {
-        chartsXY[this.chartId].chartYAxis.fit(true);
+        chartsXY[this.chartId].chartYAxis.setScrollStrategy(
+          AxisScrollStrategies.fitting
+        );
+        console.log("autoscale on");
+      } else {
+        chartsXY[this.chartId].chartYAxis.setScrollStrategy(
+          AxisScrollStrategies.Numeric
+        );
+        chartsXY[this.chartId].chartYAxis.setInterval(this.y_min, this.y_max);
       }
     },
     setDataloggingResolution() {
@@ -299,6 +380,38 @@ export default {
         this.sec_prop_visible2 = false;
       }
     },
+    selectPrimProp3(selection) {
+      // reset the secondary property names
+      this.sec_prop_names3 = [];
+      // clear the currently selected secundary prop name
+      this.selected_sec_prop_name3 = "";
+      // find any secondary property names
+      Object.keys(
+        explainModel.modelState[this.selected_component_name3][selection]
+      ).forEach((key) => {
+        if (
+          typeof explainModel.modelState[this.selected_component_name3][
+            selection
+          ] !== "string" &&
+          typeof explainModel.modelState[this.selected_component_name3][
+            selection
+          ] !== "boolean"
+        ) {
+          // add the property to the list
+          this.sec_prop_names3.push(key);
+        }
+      });
+      // sort the list of any items are on it
+      if (this.sec_prop_names3.length > 0) {
+        // make the secondary property visible
+        this.sec_prop_visible3 = true;
+        // sort th elist
+        this.sec_prop_names3.sort();
+      } else {
+        // hide the secundary property
+        this.sec_prop_visible3 = false;
+      }
+    },
     selectComponent1(selection) {
       // component1 has been selected, clear the primary and secundary property lists
       this.prim_prop_names1 = [];
@@ -357,6 +470,35 @@ export default {
         }
       }
     },
+    selectComponent3(selection) {
+      // component1 has been selected, clear the primary and secundary property lists
+      this.prim_prop_names3 = [];
+      this.sec_prop_names3 = [];
+      // component1 has been selected, clear the primary and secundary selected properties
+      this.selected_prim_prop_name3 = "";
+      this.selected_sec_prop_name3 = "";
+      // hide secondary properties as we don't know if they exist yet
+      this.sec_prop_visible3 = false;
+      // show the primary properties as we selected a component
+      this.prim_prop_visible3 = false;
+
+      if (selection) {
+        // find the primary properties of the selected component
+        Object.keys(explainModel.modelState[selection]).forEach((key) => {
+          if (
+            typeof explainModel.modelState[selection][key] !== "string" &&
+            typeof explainModel.modelState[selection][key] !== "boolean"
+          ) {
+            this.prim_prop_names3.push(key);
+          }
+        });
+        // if the propery list is not empty then sort the list alphabetically
+        if (this.prim_prop_names3.length > 0) {
+          this.prim_prop_names3.sort();
+          this.prim_prop_visible3 = true;
+        }
+      }
+    },
     stateUpdate() {
       console.log("Model state object updated!");
       // reset the component names as the model state is updated
@@ -392,6 +534,11 @@ export default {
       this.chartData2 = [];
       this.lineSeries1.clear();
       this.lineSeries2.clear();
+
+      if (!this.scaling) {
+        this.chart1_factor = 1.0;
+        this.chart2_factor = 1.0;
+      }
 
       let prop1 = "";
       let postFix1 = "";
@@ -429,9 +576,9 @@ export default {
 
       explainModel.modelData.forEach((data) => {
         if (chart1_enabled) {
-          let y1 = parseFloat(data[prop1]);
+          let y1 = parseFloat(data[prop1]) * this.chart1_factor;
           if (postFix1) {
-            y1 = parseFloat(data[prop1][postFix1]);
+            y1 = parseFloat(data[prop1][postFix1]) * this.chart1_factor;
           }
 
           this.chartData1.push({
@@ -441,9 +588,9 @@ export default {
         }
 
         if (chart2_enabled) {
-          let y2 = parseFloat(data[prop2]);
+          let y2 = parseFloat(data[prop2]) * this.chart2_factor;
           if (postFix2) {
-            y2 = parseFloat(data[prop2][postFix2]);
+            y2 = parseFloat(data[prop2][postFix2]) * this.chart2_factor;
           }
 
           this.chartData2.push({
