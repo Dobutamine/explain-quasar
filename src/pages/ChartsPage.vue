@@ -2,17 +2,17 @@
 <template>
   <q-page>
     <div class="row">
-      <ModelProbe class="col"></ModelProbe>
+      <TimeBasedChart class="col"></TimeBasedChart>
     </div>
   </q-page>
 </template>
 
 <script>
-import ModelProbe from "../components/modelProbe.vue";
+import TimeBasedChart from "../components/timeBasedChart.vue";
 
 export default {
   components: {
-    ModelProbe,
+    TimeBasedChart,
   },
   methods: {},
   data() {

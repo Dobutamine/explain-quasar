@@ -130,7 +130,7 @@
           <q-checkbox
             v-model="show_summary"
             dense
-            label="summary"
+            label="analyze"
             style="font-size: 12px"
           />
           <q-checkbox
@@ -218,6 +218,163 @@
         </div>
       </div>
     </div>
+
+    <div v-if="show_summary" class="q-mt-sm">
+      <div v-if="chart1_enabled" class="q-gutter-xs row justify-center q-mt-xs">
+        <q-input
+          v-model="y1_min"
+          outlined
+          dense
+          square
+          label="y1 min"
+          style="width: 100px; font-size: 12px"
+        />
+        <q-input
+          v-model="y1_max"
+          outlined
+          dense
+          square
+          label="y1 max"
+          style="width: 100px; font-size: 12px"
+        />
+        <q-input
+          v-model="y1_mean"
+          outlined
+          dense
+          square
+          label="y1 mean"
+          style="width: 100px; font-size: 12px"
+        />
+        <q-input
+          v-model="y1_sd"
+          outlined
+          dense
+          square
+          label="y1 sd"
+          style="width: 100px; font-size: 12px"
+        />
+        <q-input
+          v-model="y1_perminute"
+          outlined
+          dense
+          square
+          label="y1 /min"
+          style="width: 100px; font-size: 12px"
+        />
+        <q-input
+          v-model="y1_perbeat"
+          outlined
+          dense
+          square
+          label="y1 /beat"
+          style="width: 100px; font-size: 12px"
+        />
+      </div>
+      <div v-if="chart2_enabled" class="q-gutter-xs row justify-center q-mt-xs">
+        <q-input
+          v-model="y2_min"
+          outlined
+          dense
+          square
+          label="y2 min"
+          style="width: 100px; font-size: 12px"
+        />
+        <q-input
+          v-model="y2_max"
+          outlined
+          dense
+          square
+          label="y2 max"
+          style="width: 100px; font-size: 12px"
+        />
+
+        <q-input
+          v-model="y2_mean"
+          outlined
+          dense
+          square
+          label="y2 mean"
+          style="width: 100px; font-size: 12px"
+        />
+        <q-input
+          v-model="y2_sd"
+          outlined
+          dense
+          square
+          label="y2 sd"
+          style="width: 100px; font-size: 12px"
+        />
+
+        <q-input
+          v-model="y2_perminute"
+          outlined
+          dense
+          square
+          label="y2 /min"
+          style="width: 100px; font-size: 12px"
+        />
+        <q-input
+          v-model="y2_perbeat"
+          outlined
+          dense
+          square
+          label="y2 /beat"
+          style="width: 100px; font-size: 12px"
+        />
+      </div>
+      <div v-if="chart3_enabled" class="q-gutter-xs row justify-center q-mt-xs">
+        <q-input
+          v-model="y3_min"
+          outlined
+          dense
+          square
+          label="y3 min"
+          style="width: 100px; font-size: 12px"
+        />
+        <q-input
+          v-model="y3_max"
+          outlined
+          dense
+          square
+          label="y3 max"
+          style="width: 100px; font-size: 12px"
+        />
+
+        <q-input
+          v-model="y3_mean"
+          outlined
+          dense
+          square
+          label="y3 mean"
+          style="width: 100px; font-size: 12px"
+        />
+        <q-input
+          v-model="y3_sd"
+          outlined
+          dense
+          square
+          label="y3 sd"
+          style="width: 100px; font-size: 12px"
+        />
+
+        <q-input
+          v-model="y3_perminute"
+          outlined
+          dense
+          square
+          label="y3 /min"
+          style="width: 100px; font-size: 12px"
+        />
+        <q-input
+          v-model="y3_perbeat"
+          outlined
+          dense
+          square
+          label="y3 /beat"
+          style="width: 100px; font-size: 12px"
+        />
+      </div>
+    </div>
     <q-separator class="q-mt-sm" size="2px"></q-separator>
   </div>
 </template>
@@ -249,6 +406,24 @@ export default {
   },
   data() {
     return {
+      y1_min: 0,
+      y1_max: 0,
+      y1_mean: 0,
+      y1_sd: 0,
+      y1_perminute: 0,
+      y1_perbeat: 0,
+      y2_min: 0,
+      y2_max: 0,
+      y2_mean: 0,
+      y2_sd: 0,
+      y2_perminute: 0,
+      y2_perbeat: 0,
+      y3_min: 0,
+      y3_max: 0,
+      y3_mean: 0,
+      y3_sd: 0,
+      y3_perminute: 0,
+      y3_perbeat: 0,
       show_summary: false,
       export_file_name: "",
       y_min: 0,
@@ -299,6 +474,9 @@ export default {
       sec_prop_names5: [],
       chartId: "chart",
       chartData: [],
+      chart1_enabled: false,
+      chart2_enabled: false,
+      chart3_enabled: false,
       autoscaleX: false,
       autoscaleY: false,
       title: "Title",
@@ -556,9 +734,9 @@ export default {
 
       let prop1 = "";
       let postFix1 = "";
-      let chart1_enabled = false;
+      this.chart1_enabled = false;
       if (this.selected_component_name1 && this.selected_prim_prop_name1) {
-        chart1_enabled = true;
+        this.chart1_enabled = true;
         prop1 =
           this.selected_component_name1 + "." + this.selected_prim_prop_name1;
         if (this.selected_sec_prop_name1) {
@@ -573,9 +751,9 @@ export default {
 
       let prop2 = "";
       let postFix2 = "";
-      let chart2_enabled = false;
+      this.chart2_enabled = false;
       if (this.selected_component_name2 && this.selected_prim_prop_name2) {
-        chart2_enabled = true;
+        this.chart2_enabled = true;
         prop2 =
           this.selected_component_name2 + "." + this.selected_prim_prop_name2;
         if (this.selected_sec_prop_name2) {
@@ -590,9 +768,9 @@ export default {
 
       let prop3 = "";
       let postFix3 = "";
-      let chart3_enabled = false;
+      this.chart3_enabled = false;
       if (this.selected_component_name3 && this.selected_prim_prop_name3) {
-        chart3_enabled = true;
+        this.chart3_enabled = true;
         prop3 =
           this.selected_component_name3 + "." + this.selected_prim_prop_name3;
         if (this.selected_sec_prop_name3) {
@@ -606,7 +784,7 @@ export default {
       }
 
       explainModel.modelData.forEach((data) => {
-        if (chart1_enabled) {
+        if (this.chart1_enabled) {
           let y1 = parseFloat(data[prop1]) * this.chart1_factor;
           if (postFix1) {
             y1 = parseFloat(data[prop1][postFix1]) * this.chart1_factor;
@@ -618,7 +796,7 @@ export default {
           });
         }
 
-        if (chart2_enabled) {
+        if (this.chart2_enabled) {
           let y2 = parseFloat(data[prop2]) * this.chart2_factor;
           if (postFix2) {
             y2 = parseFloat(data[prop2][postFix2]) * this.chart2_factor;
@@ -630,7 +808,7 @@ export default {
           });
         }
 
-        if (chart3_enabled) {
+        if (this.chart3_enabled) {
           let y3 = parseFloat(data[prop3]) * this.chart3_factor;
           if (postFix3) {
             y3 = parseFloat(data[prop3][postFix3]) * this.chart3_factor;
@@ -643,13 +821,13 @@ export default {
         }
       });
 
-      if (chart1_enabled) {
+      if (this.chart1_enabled) {
         this.lineSeries1.add(this.chartData1);
       }
-      if (chart2_enabled) {
+      if (this.chart2_enabled) {
         this.lineSeries2.add(this.chartData2);
       }
-      if (chart3_enabled) {
+      if (this.chart3_enabled) {
         this.lineSeries3.add(this.chartData3);
       }
     },

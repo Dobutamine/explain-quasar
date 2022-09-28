@@ -27,11 +27,11 @@
           rel="noopener"
         >
           <q-item-section avatar>
-            <q-icon name="fa-solid fa-heart-pulse" />
+            <q-icon name="fa-solid fa-chart-line" />
           </q-item-section>
           <q-item-section>
-            <q-item-label>New</q-item-label>
-            <q-item-label caption>new model</q-item-label>
+            <q-item-label>Charts</q-item-label>
+            <q-item-label caption>interactive charts</q-item-label>
           </q-item-section>
         </q-item>
 
