@@ -17,10 +17,7 @@ export default class DataCollector {
   model_data = [];
   hi_res = false;
 
-  log_items = [
-    { model: "AA", prim_prop: "pres", sec_prop: "" },
-    { model: "RA", prim_prop: "pres", sec_prop: "" },
-  ];
+  log_items = [{ model: "heart", prim_prop: "ncc_ventricular", sec_prop: "" }];
 
   constructor(model_ref) {
     // store a reference to the model object

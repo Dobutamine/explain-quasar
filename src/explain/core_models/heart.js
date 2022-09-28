@@ -69,8 +69,8 @@ export class Heart extends CoreModel {
   _p_wave_signal_counter = 0;
   _qrs_wave_signal_counter = 0;
   _t_wave_signal_counter = 0;
-  _ncc_atrial = 0;
-  _ncc_ventricular = 0;
+  ncc_atrial = 0;
+  ncc_ventricular = 0;
 
   constructor(args, model_ref) {
     // call the base class which defines the methods (modelStep, initModel and calcModel) and the common parameters (name, description, is_enabled)
@@ -107,7 +107,7 @@ export class Heart extends CoreModel {
       // signal that the pq time starts running
       this._pq_running = true;
       // reset the atrial activation curve counter
-      this._ncc_atrial = -1;
+      this.ncc_atrial = -1;
     }
 
     // has the pq time elapsed?
@@ -121,7 +121,7 @@ export class Heart extends CoreModel {
         // signal that the qrs time starts running
         this._qrs_running = true;
         // reset the ventricular activation curve counter
-        this._ncc_ventricular = -1;
+        this.ncc_ventricular = -1;
         // increase the measured qrs counter with 1 beat
         this._measured_qrs_counter += 1;
       }
@@ -209,8 +209,8 @@ export class Heart extends CoreModel {
     this._measured_hr_time_counter += this._model.modeling_stepsize;
 
     // increase the activation curve timers
-    this._ncc_atrial += 1;
-    this._ncc_ventricular += 1;
+    this.ncc_atrial += 1;
+    this.ncc_ventricular += 1;
 
     // calculate the varying elastance function
     this.calcVaryingElastanceFactor();
@@ -233,7 +233,7 @@ export class Heart extends CoreModel {
     const atrial_duration = this.pq_time;
     const ventricular_duration = this.cqt_time + this.qrs_time;
 
-    if (this._ncc_atrial >= 0 && this._ncc_atrial < this.pq_time / _t) {
+    if (this.ncc_atrial >= 0 && this.ncc_atrial < this.pq_time / _t) {
       // gaussian curve => y = a * exp(-((t - b) / c)^2) where
       // a = height
       // b = position of the peak
@@ -242,15 +242,15 @@ export class Heart extends CoreModel {
       const a = this.atrial_a;
       const b = this.atrial_b * atrial_duration;
       const c = this.atrial_c * atrial_duration;
-      const t = this._ncc_atrial * _t;
+      const t = this.ncc_atrial * _t;
 
       this.aaf = a * Math.exp(-Math.pow((t - b) / c, 2));
     }
 
     // varying elastance activation function of the ventricles
     if (
-      this._ncc_ventricular >= 0 &&
-      this._ncc_ventricular < ventricular_duration / _t
+      this.ncc_ventricular >= 0 &&
+      this.ncc_ventricular < ventricular_duration / _t
     ) {
       // the ventricular activation curve consists of two gaussian curves on top of each other
       // gaussian curve => y = a * exp(-((t - b) / c)^2) where
@@ -266,7 +266,7 @@ export class Heart extends CoreModel {
       const b2 = this.ventr_b2 * ventricular_duration;
       const c2 = this.ventr_c2 * ventricular_duration;
 
-      const t = this._ncc_ventricular * _t;
+      const t = this.ncc_ventricular * _t;
       const vaf1 = a1 * Math.exp(-Math.pow((t - b1) / c1, 2));
       const vaf2 = a2 * Math.exp(-Math.pow((t - b2) / c2, 2));
 

@@ -222,14 +222,7 @@
     <div v-if="show_summary" class="q-mt-sm">
       <div v-if="chart1_enabled" class="q-gutter-xs row justify-center q-mt-xs">
         <q-input
-          v-model="y1_min"
-          outlined
-          dense
-          square
-          label="y1 min"
-          style="width: 100px; font-size: 12px"
-        />
-        <q-input
+          color="black"
           v-model="y1_max"
           outlined
           dense
@@ -238,6 +231,26 @@
           style="width: 100px; font-size: 12px"
         />
         <q-input
+          color="black"
+          v-model="y1_min"
+          outlined
+          dense
+          square
+          label="y1 min"
+          style="width: 100px; font-size: 12px"
+        />
+
+        <q-input
+          color="black"
+          v-model="y1_perbeat"
+          outlined
+          dense
+          square
+          label="y1 max-min"
+          style="width: 100px; font-size: 12px"
+        />
+        <q-input
+          color="black"
           v-model="y1_mean"
           outlined
           dense
@@ -246,6 +259,7 @@
           style="width: 100px; font-size: 12px"
         />
         <q-input
+          color="black"
           v-model="y1_sd"
           outlined
           dense
@@ -254,6 +268,7 @@
           style="width: 100px; font-size: 12px"
         />
         <q-input
+          color="black"
           v-model="y1_perminute"
           outlined
           dense
@@ -261,25 +276,10 @@
           label="y1 /min"
           style="width: 100px; font-size: 12px"
         />
-        <q-input
-          v-model="y1_perbeat"
-          outlined
-          dense
-          square
-          label="y1 /beat"
-          style="width: 100px; font-size: 12px"
-        />
       </div>
       <div v-if="chart2_enabled" class="q-gutter-xs row justify-center q-mt-xs">
         <q-input
-          v-model="y2_min"
-          outlined
-          dense
-          square
-          label="y2 min"
-          style="width: 100px; font-size: 12px"
-        />
-        <q-input
+          color="black"
           v-model="y2_max"
           outlined
           dense
@@ -287,8 +287,28 @@
           label="y2 max"
           style="width: 100px; font-size: 12px"
         />
+        <q-input
+          color="black"
+          v-model="y2_min"
+          outlined
+          dense
+          square
+          label="y2 min"
+          style="width: 100px; font-size: 12px"
+        />
 
         <q-input
+          color="black"
+          v-model="y2_perbeat"
+          outlined
+          dense
+          square
+          label="y2 max-min"
+          style="width: 100px; font-size: 12px"
+        />
+
+        <q-input
+          color="black"
           v-model="y2_mean"
           outlined
           dense
@@ -297,6 +317,7 @@
           style="width: 100px; font-size: 12px"
         />
         <q-input
+          color="black"
           v-model="y2_sd"
           outlined
           dense
@@ -306,6 +327,7 @@
         />
 
         <q-input
+          color="black"
           v-model="y2_perminute"
           outlined
           dense
@@ -313,25 +335,10 @@
           label="y2 /min"
           style="width: 100px; font-size: 12px"
         />
-        <q-input
-          v-model="y2_perbeat"
-          outlined
-          dense
-          square
-          label="y2 /beat"
-          style="width: 100px; font-size: 12px"
-        />
       </div>
       <div v-if="chart3_enabled" class="q-gutter-xs row justify-center q-mt-xs">
         <q-input
-          v-model="y3_min"
-          outlined
-          dense
-          square
-          label="y3 min"
-          style="width: 100px; font-size: 12px"
-        />
-        <q-input
+          color="black"
           v-model="y3_max"
           outlined
           dense
@@ -339,8 +346,28 @@
           label="y3 max"
           style="width: 100px; font-size: 12px"
         />
+        <q-input
+          color="black"
+          v-model="y3_min"
+          outlined
+          dense
+          square
+          label="y3 min"
+          style="width: 100px; font-size: 12px"
+        />
 
         <q-input
+          color="black"
+          v-model="y3_perbeat"
+          outlined
+          dense
+          square
+          label="y3 max-min"
+          style="width: 100px; font-size: 12px"
+        />
+
+        <q-input
+          color="black"
           v-model="y3_mean"
           outlined
           dense
@@ -349,6 +376,7 @@
           style="width: 100px; font-size: 12px"
         />
         <q-input
+          color="black"
           v-model="y3_sd"
           outlined
           dense
@@ -358,19 +386,12 @@
         />
 
         <q-input
+          color="black"
           v-model="y3_perminute"
           outlined
           dense
           square
           label="y3 /min"
-          style="width: 100px; font-size: 12px"
-        />
-        <q-input
-          v-model="y3_perbeat"
-          outlined
-          dense
-          square
-          label="y3 /beat"
           style="width: 100px; font-size: 12px"
         />
       </div>
@@ -384,6 +405,7 @@
 let chartsXY = {};
 
 import { explainModel } from "src/boot/explain";
+import * as Stat from "simple-statistics";
 
 import {
   lightningChart,
@@ -491,6 +513,56 @@ export default {
     };
   },
   methods: {
+    analyzeData() {
+      const y1_values = [];
+      const y2_values = [];
+      const y3_values = [];
+
+      if (this.chart1_enabled) {
+        this.chartData1.forEach((datapoint) => {
+          y1_values.push(datapoint.y);
+        });
+        this.y1_min = Stat.min(y1_values).toFixed(4);
+        this.y1_max = Stat.max(y1_values).toFixed(4);
+        this.y1_mean = Stat.mean(y1_values).toFixed(4);
+        this.y1_sd = Stat.standardDeviation(y1_values).toFixed(4);
+        this.y1_perminute = (
+          (Stat.sum(y1_values) / parseFloat(y1_values.length)) *
+          60.0
+        ).toFixed(4);
+        this.y1_perbeat = (this.y1_max - this.y1_min).toFixed(4);
+      }
+
+      if (this.chart2_enabled) {
+        this.chartData2.forEach((datapoint) => {
+          y2_values.push(datapoint.y);
+        });
+        this.y2_min = Stat.min(y2_values).toFixed(4);
+        this.y2_max = Stat.max(y2_values).toFixed(4);
+        this.y2_mean = Stat.mean(y2_values).toFixed(4);
+        this.y2_sd = Stat.standardDeviation(y2_values).toFixed(4);
+        this.y2_perminute = (
+          (Stat.sum(y2_values) / parseFloat(y2_values.length)) *
+          60.0
+        ).toFixed(4);
+        this.y2_perbeat = (this.y2_max - this.y2_min).toFixed(4);
+      }
+
+      if (this.chart3_enabled) {
+        this.chartData3.forEach((datapoint) => {
+          y3_values.push(datapoint.y);
+        });
+        this.y3_min = Stat.min(y3_values).toFixed(4);
+        this.y3_max = Stat.max(y3_values).toFixed(4);
+        this.y3_mean = Stat.mean(y3_values).toFixed(4);
+        this.y3_sd = Stat.standardDeviation(y3_values).toFixed(4);
+        this.y3_perminute = (
+          (Stat.sum(y3_values) / parseFloat(y3_values.length)) *
+          60.0
+        ).toFixed(4);
+        this.y3_perbeat = (this.y3_max - this.y3_min).toFixed(4);
+      }
+    },
     exportData() {},
 
     autoscaling() {
@@ -829,6 +901,10 @@ export default {
       }
       if (this.chart3_enabled) {
         this.lineSeries3.add(this.chartData3);
+      }
+
+      if (this.show_summary) {
+        this.analyzeData();
       }
     },
     statusUpdate() {},
