@@ -52,7 +52,6 @@ export default class DataCollector {
         sec_prop: sec_prop,
       });
     }
-    console.log(this.log_items);
   }
   modelStep() {
     if (this.is_initialized) {

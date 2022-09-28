@@ -129,8 +129,16 @@
         <div class="q-gutter-sm row justify-center">
           <q-checkbox
             v-model="show_summary"
+            @update:model-value="analyzeData"
             dense
             label="analyze"
+            style="font-size: 12px"
+          />
+          <q-checkbox
+            v-model="hiresLogging"
+            dense
+            label="hi-res"
+            @update:model-value="setDataloggingResolution"
             style="font-size: 12px"
           />
           <q-checkbox
@@ -162,13 +170,7 @@
             hide-bottom-space
             style="width: 100px; font-size: 12px"
           />
-          <q-checkbox
-            v-model="hiresLogging"
-            dense
-            label="hi-res"
-            @update:model-value="setDataloggingResolution"
-            style="font-size: 12px"
-          />
+
           <q-checkbox
             v-model="scaling"
             dense
@@ -513,7 +515,31 @@ export default {
     };
   },
   methods: {
+    resetAnalysisResults() {
+      this.y1_max = 0;
+      this.y1_min = 0;
+      this.y1_mean = 0;
+      this.y1_perbeat = 0;
+      this.y1_perminute = 0;
+      this.y1_sd = 0;
+
+      this.y2_max = 0;
+      this.y2_min = 0;
+      this.y2_mean = 0;
+      this.y2_perbeat = 0;
+      this.y2_perminute = 0;
+      this.y2_sd = 0;
+
+      this.y3_max = 0;
+      this.y3_min = 0;
+      this.y3_mean = 0;
+      this.y3_perbeat = 0;
+      this.y3_perminute = 0;
+      this.y3_sd = 0;
+    },
     analyzeData() {
+      this.resetAnalysisResults();
+
       const y1_values = [];
       const y2_values = [];
       const y3_values = [];
@@ -938,6 +964,8 @@ export default {
         explainModel.getModelState();
         this.first_run = false;
       }
+
+      this.resetAnalysisResults();
     },
     createChart() {
       let chart_object = {
