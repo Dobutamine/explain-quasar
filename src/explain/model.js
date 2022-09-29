@@ -15,6 +15,7 @@ export default class Model {
   modelDataRT = [];
 
   // declare the events
+  rt_event = new CustomEvent("rt");
   data_event = new CustomEvent("data");
   state_event = new CustomEvent("state");
   status_event = new CustomEvent("status");
@@ -131,10 +132,20 @@ export default class Model {
 
   start() {
     // start realtime model
+    this.sendMessage({
+      type: "command",
+      message: "start",
+      payload: [],
+    });
   }
 
   stop() {
     // stop the realtime model
+    this.sendMessage({
+      type: "command",
+      message: "stop",
+      payload: [],
+    });
   }
 
   calculate(time_to_calculate) {
@@ -193,8 +204,9 @@ export default class Model {
             // reaise com ready event
             document.dispatchEvent(this.state_event);
             break;
-          case "rt_data":
+          case "rt":
             this.modelDataRT = e.data.payload;
+            document.dispatchEvent(this.rt_event);
             break;
         }
       };

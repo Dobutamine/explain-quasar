@@ -816,6 +816,9 @@ export default {
       this.sec_prop_visible5 = false;
     },
     errorUpdate() {},
+    rtUpdate() {
+      this.dataUpdate();
+    },
     dataUpdate() {
       this.chartData1 = [];
       this.chartData2 = [];
@@ -1080,6 +1083,7 @@ export default {
     document.removeEventListener("error", this.errorUpdate);
     document.removeEventListener("status", this.statusUpdate);
     document.removeEventListener("state", this.stateUpdate);
+    document.removeEventListener("rt", this.rtUpdate);
   },
   beforeMount() {
     // generate a unique chartID
@@ -1092,6 +1096,7 @@ export default {
     // get the model state
     explainModel.getModelState();
 
+    document.addEventListener("rt", this.rtUpdate);
     document.addEventListener("data", this.dataUpdate);
     document.addEventListener("status", this.statusUpdate);
     document.addEventListener("error", this.errorUpdate);

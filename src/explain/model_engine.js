@@ -1,6 +1,7 @@
 // import all models present in the model_index module
 import * as models from "./model_index";
 import DataCollector from "./helpers/datacollector";
+import { mode } from "simple-statistics";
 
 // declare a model object
 let model = {
@@ -16,6 +17,10 @@ let model_data = [];
 // store all models in a list
 const available_models = [];
 Object.values(models).forEach((model) => available_models.push(model));
+
+// set the realtime updateinterval
+let rt_interval = 0.015;
+let rt_clock = null;
 
 // setup the workers communication handler
 onmessage = (e) => {
@@ -242,16 +247,20 @@ function init(modelDefinition) {
 
 function start() {
   if (modelInitialized) {
+    // call the modelStep every rt_interval seconds
+    rt_clock = setInterval(modelStepRT, rt_interval * 1000.0);
   }
 }
 
 function stop() {
   if (modelInitialized) {
+    clearInterval(rt_clock);
+    rt_clock = null;
   }
 }
 
 function getModelData() {
-  // get the data from the datacollector
+  // get the data from the datacollector, this also clears the buffer from the datalogger
   model_data = model.data.getData();
 }
 
@@ -291,8 +300,17 @@ function calculate(time_to_calculate = 10.0) {
 
     // get the model data from the engine
     getModelData();
+
     // send the model data to the model instance
     sendModelData();
+  }
+}
+
+function modelStepRT() {
+  // so the rt_interval determines how often the model is calculated
+  const no_steps = rt_interval / model.modeling_stepsize;
+  for (let i = 0; i < no_steps; i++) {
+    modelStep();
   }
 }
 
@@ -300,6 +318,8 @@ function modelStep() {
   Object.values(model.components).forEach((component) => {
     component.modelStep();
   });
+  // log the data from the model
   model.data.modelStep();
+  // increase the model time
   model.model_time_total += model.modeling_stepsize;
 }

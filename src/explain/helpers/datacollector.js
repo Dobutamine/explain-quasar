@@ -6,15 +6,9 @@ export default class DataCollector {
   is_enabled = true;
   is_initialized = false;
 
-  update_freq = 1.0;
-  _update_counter = 0;
-
   datalog_interval = 0.01;
   _datalog_counter = 0;
 
-  data_ready = false;
-
-  model_data = [];
   hi_res = false;
 
   log_items = [{ model: "heart", prim_prop: "ncc_ventricular", sec_prop: "" }];
@@ -22,6 +16,11 @@ export default class DataCollector {
   constructor(model_ref) {
     // store a reference to the model object
     this.model = model_ref;
+
+    // initialize the start log_items
+    this.log_items = [
+      { model: "heart", prim_prop: "ncc_ventricular", sec_prop: "" },
+    ];
   }
 
   setDataloggingResolution(state) {
@@ -33,6 +32,26 @@ export default class DataCollector {
     }
   }
 
+  removeFromWatcher(model, prim_prop, sec_prop) {
+    // prevent duplicates
+    let found_at_index = -1;
+    let index_counter = 0;
+    this.log_items.forEach((log_item) => {
+      if (
+        log_item.model === model &&
+        log_item.prim_prop === prim_prop &&
+        log_item.sec_prop === sec_prop
+      ) {
+        found = true;
+        found_at_index = index_counter;
+      }
+      index_counter += 1;
+    });
+    if (found) {
+      // remove at index
+      this.log_items.splice(found_at_index, 1);
+    }
+  }
   addToWatcher(model, prim_prop, sec_prop) {
     // prevent duplicates
     let found = false;
@@ -53,6 +72,7 @@ export default class DataCollector {
       });
     }
   }
+  // datalogger is called every modelstep so every 0.5 sec
   modelStep() {
     if (this.is_initialized) {
       if (this.is_enabled) {
@@ -72,12 +92,12 @@ export default class DataCollector {
     // first copy the data
     let copied_data = [...this.data];
     // clear the data array
-    this.data = [];
-    // reset the data_ready flag
-    this.data_ready = false;
+    this.data.length = 0;
+    // return the data
     return copied_data;
   }
   // this method is called during every model step when the initialization is complete and the model is enabled
+  // it updates the data object not every modelstep but depending on the set resolution 0.01 (20 modelcycles) sec or 0.001 sec (2 modelcycles)
   logData() {
     if (this._datalog_counter >= this.datalog_interval) {
       this._datalog_counter = 0;
@@ -100,11 +120,5 @@ export default class DataCollector {
       this.data.push(data_entry);
     }
     this._datalog_counter += this.model.modeling_stepsize;
-
-    if (this._update_counter >= this.update_freq) {
-      this._update_counter = 0;
-      this.data_ready = true;
-    }
-    this._update_counter += this.model.modeling_stepsize;
   }
 }
