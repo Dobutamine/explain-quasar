@@ -38,6 +38,7 @@
             square
             label="prop2"
             style="width: 100px; font-size: 12px"
+            @update:model-value="selectSecPropX"
           />
 
           <q-select
@@ -478,8 +479,9 @@ export default {
     },
     setDataloggingResolution() {
       explainModel.setDataloggingResolution(this.hiresLogging);
+      this.calculate();
     },
-    selectSecProp1(selection) {
+    selectSecProp1() {
       if (this.selected_component_name1 && this.selected_prim_prop_name1) {
         explainModel.watchModelProperty(
           this.selected_component_name1,
@@ -529,7 +531,15 @@ export default {
         }
       }
     },
-
+    selectSecPropX() {
+      if (this.selected_component_name_x && this.selected_prim_prop_name_x) {
+        explainModel.watchModelProperty(
+          this.selected_component_name_x,
+          this.selected_prim_prop_name_x,
+          this.selected_sec_prop_name_x
+        );
+      }
+    },
     selectPrimPropX(selection) {
       // reset the secondary property names
       this.sec_prop_names_x = [];
@@ -609,7 +619,6 @@ export default {
         }
       }
     },
-
     selectComponentX(selection) {
       if (selection === "") {
         if (this.selected_component_name_x && this.selected_prim_prop_name_x) {
@@ -669,7 +678,6 @@ export default {
       this.sec_prop_visible_x = false;
       this.sec_prop_visible1 = false;
     },
-    errorUpdate() {},
     rtUpdate() {
       this.data_source = 1;
       this.dataUpdate();
@@ -749,24 +757,7 @@ export default {
         this.analyzeData();
       }
     },
-    statusUpdate() {},
     calculate() {
-      if (this.selected_component_name1 && this.selected_prim_prop_name1) {
-        explainModel.watchModelProperty(
-          this.selected_component_name1,
-          this.selected_prim_prop_name1,
-          this.selected_sec_prop_name1
-        );
-      }
-
-      if (this.selected_component_name_x && this.selected_prim_prop_name_x) {
-        explainModel.watchModelProperty(
-          this.selected_component_name_x,
-          this.selected_prim_prop_name_x,
-          this.selected_sec_prop_name_x
-        );
-      }
-
       explainModel.calculate(parseInt(this.number_of_seconds));
       if (this.first_run) {
         explainModel.getModelState();
@@ -864,15 +855,17 @@ export default {
       // add the chart to the global chartsXY array
       chartsXY[this.chartId] = chart_object;
     },
+    resolutionChanged(state) {
+      this.hiresLogging = state.detail.state;
+    },
   },
   beforeUnmount() {
     // remove the current chart from the chartsXY array (which is a global object)
     delete chartsXY[this.chartId];
 
+    document.removeEventListener("hires", this.resolutionChanged);
     document.removeEventListener("rt", this.rtUpdate);
     document.removeEventListener("data", this.dataUpdate);
-    document.removeEventListener("error", this.errorUpdate);
-    document.removeEventListener("status", this.statusUpdate);
     document.removeEventListener("state", this.stateUpdate);
   },
   beforeMount() {
@@ -886,10 +879,9 @@ export default {
     // get the model state
     explainModel.getModelState();
 
+    document.addEventListener("hires", this.resolutionChanged);
     document.addEventListener("rt", this.rtUpdate);
     document.addEventListener("data", this.dataUpdate);
-    document.addEventListener("status", this.statusUpdate);
-    document.addEventListener("error", this.errorUpdate);
     document.addEventListener("state", this.stateUpdate);
   },
 };

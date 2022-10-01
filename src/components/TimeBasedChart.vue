@@ -613,8 +613,9 @@ export default {
     },
     setDataloggingResolution() {
       explainModel.setDataloggingResolution(this.hiresLogging);
+      this.calculate();
     },
-    selectSecProp1(selection) {
+    selectSecProp1() {
       if (this.selected_component_name1 && this.selected_prim_prop_name1) {
         explainModel.watchModelProperty(
           this.selected_component_name1,
@@ -663,7 +664,7 @@ export default {
         }
       }
     },
-    selectSecProp2(selection) {
+    selectSecProp2() {
       if (this.selected_component_name2 && this.selected_prim_prop_name2) {
         explainModel.watchModelProperty(
           this.selected_component_name2,
@@ -712,7 +713,7 @@ export default {
         }
       }
     },
-    selectSecProp3(selection) {
+    selectSecProp3() {
       if (this.selected_component_name3 && this.selected_prim_prop_name3) {
         explainModel.watchModelProperty(
           this.selected_component_name3,
@@ -903,7 +904,6 @@ export default {
       this.sec_prop_visible4 = false;
       this.sec_prop_visible5 = false;
     },
-    errorUpdate() {},
     rtUpdate() {
       this.data_source = 1;
       this.dataUpdate();
@@ -1038,24 +1038,7 @@ export default {
         this.analyzeData();
       }
     },
-    statusUpdate() {},
     calculate() {
-      if (this.selected_component_name2 && this.selected_prim_prop_name2) {
-        explainModel.watchModelProperty(
-          this.selected_component_name2,
-          this.selected_prim_prop_name2,
-          this.selected_sec_prop_name2
-        );
-      }
-
-      if (this.selected_component_name3 && this.selected_prim_prop_name3) {
-        explainModel.watchModelProperty(
-          this.selected_component_name3,
-          this.selected_prim_prop_name3,
-          this.selected_sec_prop_name3
-        );
-      }
-
       explainModel.calculate(parseInt(this.number_of_seconds));
       if (this.first_run) {
         explainModel.getModelState();
@@ -1168,14 +1151,16 @@ export default {
       // add the chart to the global chartsXY array
       chartsXY[this.chartId] = chart_object;
     },
+    resolutionChanged(state) {
+      this.hiresLogging = state.detail.state;
+    },
   },
   beforeUnmount() {
     // remove the current chart from the chartsXY array (which is a global object)
     delete chartsXY[this.chartId];
 
+    document.removeEventListener("hires", this.resolutionChanged);
     document.removeEventListener("data", this.dataUpdate);
-    document.removeEventListener("error", this.errorUpdate);
-    document.removeEventListener("status", this.statusUpdate);
     document.removeEventListener("state", this.stateUpdate);
     document.removeEventListener("rt", this.rtUpdate);
   },
@@ -1189,11 +1174,9 @@ export default {
 
     // get the model state
     explainModel.getModelState();
-
+    document.addEventListener("hires", this.resolutionChanged);
     document.addEventListener("rt", this.rtUpdate);
     document.addEventListener("data", this.dataUpdate);
-    document.addEventListener("status", this.statusUpdate);
-    document.addEventListener("error", this.errorUpdate);
     document.addEventListener("state", this.stateUpdate);
   },
 };

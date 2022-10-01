@@ -3,8 +3,8 @@
   <q-page>
     <div class="row">
       <TimeBasedChart class="col"></TimeBasedChart>
+      <NonTimeBasedChart class="col"></NonTimeBasedChart>
     </div>
-    <NonTimeBasedChart></NonTimeBasedChart>
   </q-page>
 </template>
 

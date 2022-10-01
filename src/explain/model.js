@@ -15,6 +15,7 @@ export default class Model {
   modelDataRT = [];
 
   // declare the events
+
   rt_event = new CustomEvent("rt");
   data_event = new CustomEvent("data");
   state_event = new CustomEvent("state");
@@ -135,6 +136,13 @@ export default class Model {
       message: "datalog_res",
       payload: [state],
     });
+
+    let hires = new CustomEvent("hires", {
+      detail: {
+        state: state,
+      },
+    });
+    document.dispatchEvent(hires);
   }
 
   start() {
