@@ -177,6 +177,7 @@
 
           <q-input
             v-model.number="number_of_seconds"
+            @update:model-value="calculate"
             type="number"
             label="frame(s)"
             outlined
