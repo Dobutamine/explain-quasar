@@ -186,11 +186,9 @@
             dense
             style="width: 75px; font-size: 10px"
           />
-          <div class="row">
-            <q-btn color="negative" size="sm" @click="calculate"
-              >CALCULATE</q-btn
-            >
-          </div>
+
+          <q-btn color="negative" size="sm" @click="calculate">CALCULATE</q-btn>
+          <q-btn color="black" size="sm" @click="calculate">EXPORT</q-btn>
         </div>
       </div>
     </div>
