@@ -1,7 +1,6 @@
 // import all models present in the model_index module
 import * as models from "./model_index";
 import DataCollector from "./helpers/datacollector";
-import { mode } from "simple-statistics";
 
 // declare a model object
 let model = {
@@ -312,6 +311,14 @@ function modelStepRT() {
   for (let i = 0; i < no_steps; i++) {
     modelStep();
   }
+  // get model data and clear the memory
+  getModelData();
+  // send the model data to the model
+  postMessage({
+    type: "rt",
+    message: "",
+    payload: model_data,
+  });
 }
 
 function modelStep() {

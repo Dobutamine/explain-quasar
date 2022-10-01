@@ -430,6 +430,7 @@ export default {
   },
   data() {
     return {
+      data_source: 0,
       y1_min: 0,
       y1_max: 0,
       y1_mean: 0,
@@ -817,12 +818,16 @@ export default {
     },
     errorUpdate() {},
     rtUpdate() {
+      this.data_source = 1;
       this.dataUpdate();
+      this.data_source = 0;
     },
     dataUpdate() {
-      this.chartData1 = [];
-      this.chartData2 = [];
-      this.chartData3 = [];
+      if (this.data_source === 0) {
+        this.chartData1 = [];
+        this.chartData2 = [];
+        this.chartData3 = [];
+      }
       this.lineSeries1.clear();
       this.lineSeries2.clear();
       this.lineSeries3.clear();
@@ -895,6 +900,10 @@ export default {
             x: data.time,
             y: y1,
           });
+
+          if (this.data_source === 1) {
+            this.chartData1.shift();
+          }
         }
 
         if (this.chart2_enabled) {
@@ -907,6 +916,9 @@ export default {
             x: data.time,
             y: y2,
           });
+          if (this.data_source === 1) {
+            this.chartData2.shift();
+          }
         }
 
         if (this.chart3_enabled) {
@@ -919,6 +931,9 @@ export default {
             x: data.time,
             y: y3,
           });
+          if (this.data_source === 1) {
+            this.chartData3.shift();
+          }
         }
       });
 

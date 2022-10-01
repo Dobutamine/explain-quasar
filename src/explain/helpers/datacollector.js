@@ -11,7 +11,10 @@ export default class DataCollector {
 
   hi_res = false;
 
-  log_items = [{ model: "heart", prim_prop: "ncc_ventricular", sec_prop: "" }];
+  log_items = [
+    { model: "heart", prim_prop: "ncc_ventricular", sec_prop: "" },
+    { model: "AA", prim_prop: "pres", sec_prop: "" },
+  ];
 
   constructor(model_ref) {
     // store a reference to the model object
@@ -20,6 +23,7 @@ export default class DataCollector {
     // initialize the start log_items
     this.log_items = [
       { model: "heart", prim_prop: "ncc_ventricular", sec_prop: "" },
+      { model: "AA", prim_prop: "pres", sec_prop: "" },
     ];
   }
 

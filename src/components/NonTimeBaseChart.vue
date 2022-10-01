@@ -342,6 +342,7 @@ export default {
   },
   data() {
     return {
+      data_source: 0,
       x_min: 0,
       x_max: 0,
       x_mean: 0,
@@ -619,8 +620,15 @@ export default {
       this.sec_prop_visible1 = false;
     },
     errorUpdate() {},
+    rtUpdate() {
+      this.data_source = 1;
+      this.dataUpdate();
+      this.data_source = 0;
+    },
     dataUpdate() {
-      this.chartData1 = [];
+      if (this.data_source === 0) {
+        this.chartData1 = [];
+      }
       this.lineSeries1.clear();
 
       if (!this.scaling) {
@@ -677,6 +685,9 @@ export default {
             x: x1,
             y: y1,
           });
+          if (this.data_source === 1) {
+            this.chartData1.shift();
+          }
         }
       });
 
@@ -808,6 +819,7 @@ export default {
     // remove the current chart from the chartsXY array (which is a global object)
     delete chartsXY[this.chartId];
 
+    document.removeEventListener("rt", this.rtUpdate);
     document.removeEventListener("data", this.dataUpdate);
     document.removeEventListener("error", this.errorUpdate);
     document.removeEventListener("status", this.statusUpdate);
@@ -824,6 +836,7 @@ export default {
     // get the model state
     explainModel.getModelState();
 
+    document.addEventListener("rt", this.rtUpdate);
     document.addEventListener("data", this.dataUpdate);
     document.addEventListener("status", this.statusUpdate);
     document.addEventListener("error", this.errorUpdate);

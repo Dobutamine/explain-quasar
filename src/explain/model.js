@@ -205,7 +205,7 @@ export default class Model {
             document.dispatchEvent(this.state_event);
             break;
           case "rt":
-            this.modelDataRT = e.data.payload;
+            this.modelData = e.data.payload;
             document.dispatchEvent(this.rt_event);
             break;
         }
