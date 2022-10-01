@@ -113,6 +113,13 @@ export default class Model {
   loadModelState(filename) {
     // load a saved model state
   }
+  unwatchModelProperty(model, prim_prop, sec_prop) {
+    this.sendMessage({
+      type: "command",
+      message: "unwatch",
+      payload: [model, prim_prop, sec_prop],
+    });
+  }
 
   watchModelProperty(model, prim_prop, sec_prop) {
     this.sendMessage({

@@ -58,6 +58,9 @@ onmessage = (e) => {
         case "watch":
           watchProperty(e.data.payload);
           break;
+        case "unwatch":
+          unwatchProperty(e.data.payload);
+          break;
         case "calculate":
           calculate(e.data.payload[0]);
           break;
@@ -67,6 +70,9 @@ onmessage = (e) => {
 };
 function setDataloggingResolution(state) {
   model.data.setDataloggingResolution(state);
+}
+function unwatchProperty(prop) {
+  model.data.removeFromWatcher(prop[0], prop[1], prop[2]);
 }
 function watchProperty(prop) {
   model.data.addToWatcher(prop[0], prop[1], prop[2]);

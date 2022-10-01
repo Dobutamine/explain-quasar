@@ -2,8 +2,6 @@
 <template>
   <q-page>
     <div class="row">
-      <q-btn @click="StartRT">START</q-btn>
-      <q-btn @click="StopRT">STOP</q-btn>
       <TimeBasedChart class="col"></TimeBasedChart>
     </div>
     <NonTimeBasedChart></NonTimeBasedChart>

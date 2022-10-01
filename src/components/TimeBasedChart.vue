@@ -6,7 +6,7 @@
         <div class="q-gutter-md row justify-center">
           <q-select
             label-color="red-6"
-            v-model="selected_component_name1"
+            v-model="comp_name1"
             :options="component_names"
             hide-bottom-space
             outlined
@@ -38,11 +38,12 @@
             square
             label="prop2"
             style="width: 100px; font-size: 12px"
+            @update:model-value="selectSecProp1"
           />
           <q-select
             class="q-ml-md"
             label-color="green-6"
-            v-model="selected_component_name2"
+            v-model="comp_name2"
             :options="component_names"
             hide-bottom-space
             outlined
@@ -77,12 +78,13 @@
             square
             label="prop2"
             style="width: 100px; font-size: 12px"
+            @update:model-value="selectSecProp2"
           />
 
           <q-select
             class="q-ml-md"
             label-color="blue-6"
-            v-model="selected_component_name3"
+            v-model="comp_name3"
             :options="component_names"
             hide-bottom-space
             outlined
@@ -117,6 +119,7 @@
             square
             label="prop2"
             style="width: 100px; font-size: 12px"
+            @update:model-value="selectSecProp3"
           />
         </div>
       </div>
@@ -463,6 +466,9 @@ export default {
       number_of_seconds: 5,
       hiresLogging: false,
       component_names: [],
+      comp_name1: "",
+      comp_name2: "",
+      comp_name3: "",
       selected_component_name1: "",
       selected_prim_prop_name1: "",
       selected_sec_prop_name1: "",
@@ -608,6 +614,15 @@ export default {
     setDataloggingResolution() {
       explainModel.setDataloggingResolution(this.hiresLogging);
     },
+    selectSecProp1(selection) {
+      if (this.selected_component_name1 && this.selected_prim_prop_name1) {
+        explainModel.watchModelProperty(
+          this.selected_component_name1,
+          this.selected_prim_prop_name1,
+          this.selected_sec_prop_name1
+        );
+      }
+    },
     selectPrimProp1(selection) {
       // reset the secondary property names
       this.sec_prop_names1 = [];
@@ -638,6 +653,23 @@ export default {
       } else {
         // hide the secundary property
         this.sec_prop_visible1 = false;
+        // add to the watcher
+        if (this.selected_component_name1 && this.selected_prim_prop_name1) {
+          explainModel.watchModelProperty(
+            this.selected_component_name1,
+            this.selected_prim_prop_name1,
+            this.selected_sec_prop_name1
+          );
+        }
+      }
+    },
+    selectSecProp2(selection) {
+      if (this.selected_component_name2 && this.selected_prim_prop_name2) {
+        explainModel.watchModelProperty(
+          this.selected_component_name2,
+          this.selected_prim_prop_name2,
+          this.selected_sec_prop_name2
+        );
       }
     },
     selectPrimProp2(selection) {
@@ -670,6 +702,23 @@ export default {
       } else {
         // hide the secundary property
         this.sec_prop_visible2 = false;
+        // add to the watcher
+        if (this.selected_component_name2 && this.selected_prim_prop_name2) {
+          explainModel.watchModelProperty(
+            this.selected_component_name2,
+            this.selected_prim_prop_name2,
+            this.selected_sec_prop_name2
+          );
+        }
+      }
+    },
+    selectSecProp3(selection) {
+      if (this.selected_component_name3 && this.selected_prim_prop_name3) {
+        explainModel.watchModelProperty(
+          this.selected_component_name3,
+          this.selected_prim_prop_name3,
+          this.selected_sec_prop_name3
+        );
       }
     },
     selectPrimProp3(selection) {
@@ -702,9 +751,27 @@ export default {
       } else {
         // hide the secundary property
         this.sec_prop_visible3 = false;
+        // add to the watcher
+        if (this.selected_component_name3 && this.selected_prim_prop_name3) {
+          explainModel.watchModelProperty(
+            this.selected_component_name3,
+            this.selected_prim_prop_name3,
+            this.selected_sec_prop_name3
+          );
+        }
       }
     },
     selectComponent1(selection) {
+      if (selection === "") {
+        if (this.selected_component_name1 && this.selected_prim_prop_name1) {
+          explainModel.unwatchModelProperty(
+            this.selected_component_name1,
+            this.selected_prim_prop_name1,
+            this.selected_sec_prop_name1
+          );
+        }
+      }
+      this.selected_component_name1 = selection;
       // component1 has been selected, clear the primary and secundary property lists
       this.prim_prop_names1 = [];
       this.sec_prop_names1 = [];
@@ -734,6 +801,16 @@ export default {
       }
     },
     selectComponent2(selection) {
+      if (selection === "") {
+        if (this.selected_component_name2 && this.selected_prim_prop_name2) {
+          explainModel.unwatchModelProperty(
+            this.selected_component_name2,
+            this.selected_prim_prop_name2,
+            this.selected_sec_prop_name2
+          );
+        }
+      }
+      this.selected_component_name2 = selection;
       // component1 has been selected, clear the primary and secundary property lists
       this.prim_prop_names2 = [];
       this.sec_prop_names2 = [];
@@ -763,6 +840,15 @@ export default {
       }
     },
     selectComponent3(selection) {
+      if (selection === "") {
+        if (this.selected_component_name3 && this.selected_prim_prop_name3) {
+          explainModel.unwatchModelProperty(
+            this.selected_component_name3,
+            this.selected_prim_prop_name3,
+            this.selected_sec_prop_name3
+          );
+        }
+      }
       // component1 has been selected, clear the primary and secundary property lists
       this.prim_prop_names3 = [];
       this.sec_prop_names3 = [];
@@ -954,14 +1040,6 @@ export default {
     },
     statusUpdate() {},
     calculate() {
-      if (this.selected_component_name1 && this.selected_prim_prop_name1) {
-        explainModel.watchModelProperty(
-          this.selected_component_name1,
-          this.selected_prim_prop_name1,
-          this.selected_sec_prop_name1
-        );
-      }
-
       if (this.selected_component_name2 && this.selected_prim_prop_name2) {
         explainModel.watchModelProperty(
           this.selected_component_name2,

@@ -6,7 +6,7 @@
         <div class="q-gutter-md row justify-center">
           <q-select
             label-color="red-6"
-            v-model="selected_component_name_x"
+            v-model="comp_namex"
             :options="component_names"
             hide-bottom-space
             outlined
@@ -42,7 +42,7 @@
 
           <q-select
             label-color="red-6"
-            v-model="selected_component_name1"
+            v-model="comp_name1"
             :options="component_names"
             hide-bottom-space
             outlined
@@ -74,6 +74,7 @@
             square
             label="prop2"
             style="width: 100px; font-size: 12px"
+            @update:model-value="selectSecProp1"
           />
         </div>
       </div>
@@ -370,6 +371,8 @@ export default {
       number_of_seconds: 5,
       hiresLogging: false,
       component_names: [],
+      comp_name1: "",
+      comp_namex: "",
       selected_component_name_x: "",
       selected_prim_prop_name_x: "",
       selected_sec_prop_name_x: "",
@@ -476,6 +479,15 @@ export default {
     setDataloggingResolution() {
       explainModel.setDataloggingResolution(this.hiresLogging);
     },
+    selectSecProp1(selection) {
+      if (this.selected_component_name1 && this.selected_prim_prop_name1) {
+        explainModel.watchModelProperty(
+          this.selected_component_name1,
+          this.selected_prim_prop_name1,
+          this.selected_sec_prop_name1
+        );
+      }
+    },
     selectPrimProp1(selection) {
       // reset the secondary property names
       this.sec_prop_names1 = [];
@@ -506,6 +518,15 @@ export default {
       } else {
         // hide the secundary property
         this.sec_prop_visible1 = false;
+        // add to watcher
+        // add to watcher
+        if (this.selected_component_name1 && this.selected_prim_prop_name1) {
+          explainModel.watchModelProperty(
+            this.selected_component_name1,
+            this.selected_prim_prop_name1,
+            this.selected_sec_prop_name1
+          );
+        }
       }
     },
 
@@ -539,9 +560,27 @@ export default {
       } else {
         // hide the secundary property
         this.sec_prop_visible_x = false;
+        // add to watcher
+        if (this.selected_component_name_x && this.selected_prim_prop_name_x) {
+          explainModel.watchModelProperty(
+            this.selected_component_name_x,
+            this.selected_prim_prop_name_x,
+            this.selected_sec_prop_name_x
+          );
+        }
       }
     },
     selectComponent1(selection) {
+      if (selection === "") {
+        if (this.selected_component_name1 && this.selected_prim_prop_name1) {
+          explainModel.unwatchModelProperty(
+            this.selected_component_name1,
+            this.selected_prim_prop_name1,
+            this.selected_sec_prop_name1
+          );
+        }
+      }
+      this.selected_component_name1 = selection;
       // component1 has been selected, clear the primary and secundary property lists
       this.prim_prop_names1 = [];
       this.sec_prop_names1 = [];
@@ -572,6 +611,16 @@ export default {
     },
 
     selectComponentX(selection) {
+      if (selection === "") {
+        if (this.selected_component_name_x && this.selected_prim_prop_name_x) {
+          explainModel.unwatchModelProperty(
+            this.selected_component_name_x,
+            this.selected_prim_prop_name_x,
+            this.selected_sec_prop_name_x
+          );
+        }
+      }
+      this.selected_component_name_x = selection;
       // component1 has been selected, clear the primary and secundary property lists
       this.prim_prop_names_x = [];
       this.sec_prop_names_x = [];

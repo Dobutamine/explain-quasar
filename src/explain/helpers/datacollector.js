@@ -12,8 +12,8 @@ export default class DataCollector {
   hi_res = false;
 
   log_items = [
-    { model: "heart", prim_prop: "ncc_ventricular", sec_prop: "" },
-    { model: "AA", prim_prop: "pres", sec_prop: "" },
+    { model: "heart", prim_prop: "ncc_ventricular", sec_prop: "", ref: 1 },
+    { model: "AA", prim_prop: "pres", sec_prop: "", ref: 1 },
   ];
 
   constructor(model_ref) {
@@ -22,8 +22,8 @@ export default class DataCollector {
 
     // initialize the start log_items
     this.log_items = [
-      { model: "heart", prim_prop: "ncc_ventricular", sec_prop: "" },
-      { model: "AA", prim_prop: "pres", sec_prop: "" },
+      { model: "heart", prim_prop: "ncc_ventricular", sec_prop: "", ref: 0 },
+      { model: "AA", prim_prop: "pres", sec_prop: "", ref: 0 },
     ];
   }
 
@@ -40,6 +40,7 @@ export default class DataCollector {
     // prevent duplicates
     let found_at_index = -1;
     let index_counter = 0;
+    let found = false;
     this.log_items.forEach((log_item) => {
       if (
         log_item.model === model &&
@@ -52,9 +53,13 @@ export default class DataCollector {
       index_counter += 1;
     });
     if (found) {
+      this.log_items[found_at_index].ref -= 1;
       // remove at index
-      this.log_items.splice(found_at_index, 1);
+      if (this.log_items[found_at_index].ref <= 0) {
+        this.log_items.splice(found_at_index, 1);
+      }
     }
+    console.log(this.log_items);
   }
   addToWatcher(model, prim_prop, sec_prop) {
     // prevent duplicates
@@ -66,6 +71,7 @@ export default class DataCollector {
         log_item.sec_prop === sec_prop
       ) {
         found = true;
+        log_item.ref += 1;
       }
     });
     if (!found) {
@@ -73,8 +79,10 @@ export default class DataCollector {
         model: model,
         prim_prop: prim_prop,
         sec_prop: sec_prop,
+        ref: 1,
       });
     }
+    console.log(this.log_items);
   }
   // datalogger is called every modelstep so every 0.5 sec
   modelStep() {
