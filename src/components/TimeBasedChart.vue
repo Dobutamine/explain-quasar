@@ -138,13 +138,6 @@
             style="font-size: 12px"
           />
           <q-checkbox
-            v-model="hiresLogging"
-            dense
-            label="hi-res"
-            @update:model-value="setDataloggingResolution"
-            style="font-size: 12px"
-          />
-          <q-checkbox
             v-model="autoscale"
             dense
             label="autoscale"
@@ -207,17 +200,6 @@
             dense
             style="width: 75px; font-size: 10px"
           />
-          <q-input
-            v-model.number="number_of_seconds"
-            @update:model-value="calculate"
-            type="number"
-            label="frame(s)"
-            outlined
-            dense
-            style="width: 75px; font-size: 10px"
-          />
-
-          <q-btn color="negative" size="sm" @click="calculate">CALCULATE</q-btn>
 
           <q-btn color="black" size="sm" @click="calculate">EXPORT</q-btn>
         </div>
@@ -461,9 +443,7 @@ export default {
       chart1_factor: 1.0,
       chart2_factor: 1.0,
       chart3_factor: 1.0,
-      rt_frame: 1.0,
-      number_of_seconds: 5,
-      hiresLogging: false,
+
       component_names: [],
       comp_name1: "",
       comp_name2: "",
@@ -609,10 +589,6 @@ export default {
         );
         chartsXY[this.chartId].chartYAxis.setInterval(this.y_min, this.y_max);
       }
-    },
-    setDataloggingResolution() {
-      explainModel.setDataloggingResolution(this.hiresLogging);
-      this.calculate();
     },
     selectSecProp1() {
       if (this.selected_component_name1 && this.selected_prim_prop_name1) {
@@ -1150,15 +1126,11 @@ export default {
       // add the chart to the global chartsXY array
       chartsXY[this.chartId] = chart_object;
     },
-    resolutionChanged(state) {
-      this.hiresLogging = state.detail.state;
-    },
   },
   beforeUnmount() {
     // remove the current chart from the chartsXY array (which is a global object)
     delete chartsXY[this.chartId];
 
-    document.removeEventListener("hires", this.resolutionChanged);
     document.removeEventListener("data", this.dataUpdate);
     document.removeEventListener("state", this.stateUpdate);
     document.removeEventListener("rt", this.rtUpdate);
@@ -1173,7 +1145,6 @@ export default {
 
     // get the model state
     explainModel.getModelState();
-    document.addEventListener("hires", this.resolutionChanged);
     document.addEventListener("rt", this.rtUpdate);
     document.addEventListener("data", this.dataUpdate);
     document.addEventListener("state", this.stateUpdate);

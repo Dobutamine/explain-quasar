@@ -4,7 +4,8 @@
     <div class="row">
       <TimeBasedChart class="col"></TimeBasedChart>
     </div>
-    <NonTimeBasedChart class="col"></NonTimeBasedChart>
+
+    <ModelControllerVue></ModelControllerVue>
   </q-page>
 </template>
 
@@ -13,11 +14,13 @@ import { explainModel } from "src/boot/explain";
 
 import TimeBasedChart from "../components/TimeBasedChart.vue";
 import NonTimeBasedChart from "../components/NonTimeBaseChart.vue";
+import ModelControllerVue from "src/components/ModelController.vue";
 
 export default {
   components: {
     TimeBasedChart,
-    NonTimeBasedChart,
+
+    ModelControllerVue,
   },
   methods: {
     StartRT() {
