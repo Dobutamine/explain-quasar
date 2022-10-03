@@ -444,7 +444,7 @@ export default {
           this.selected_prim_prop_name1 +
           this.selected_sec_prop_name1 +
           ".csv";
-        this.exportFileName = header + "_" + t + ".csv";
+        this.exportFileName = `${header}_${t}.csv`;
         this.writeDataToDisk(this.chartData1, header);
       }
     },

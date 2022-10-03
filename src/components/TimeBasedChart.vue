@@ -586,7 +586,7 @@ export default {
           this.selected_prim_prop_name1 +
           this.selected_sec_prop_name1;
 
-        this.exportFileName = "time_vs_" + header + "_" + t + ".csv";
+        this.exportFileName = `time_vs_${header}_${t}.csv`;
         this.writeDataToDisk(this.chartData1, "time," + header);
       }
       if (this.chart2_enabled) {
@@ -594,7 +594,7 @@ export default {
           this.selected_component_name2 +
           this.selected_prim_prop_name2 +
           this.selected_sec_prop_name2;
-        this.exportFileName = "time_vs_" + header + "_" + t + ".csv";
+        this.exportFileName = `time_vs_${header}_${t}.csv`;
 
         this.writeDataToDisk(this.chartData2, "time," + header);
       }
@@ -603,7 +603,7 @@ export default {
           this.selected_component_name3 +
           this.selected_prim_prop_name3 +
           this.selected_sec_prop_name3;
-        this.exportFileName = "time_vs_" + header + "_" + t + ".csv";
+        this.exportFileName = `time_vs_${header}_${t}.csv`;
 
         this.writeDataToDisk(this.chartData3, "time," + header);
       }
