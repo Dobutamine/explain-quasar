@@ -4,8 +4,8 @@
     <div class="row">
       <TimeBasedChart class="col"></TimeBasedChart>
     </div>
-
-    <ModelControllerVue></ModelControllerVue>
+    <NonTimeBasedChart></NonTimeBasedChart>
+    <ModelControllerVue class="q-ma-sm absolute-bottom"></ModelControllerVue>
   </q-page>
 </template>
 
@@ -19,7 +19,7 @@ import ModelControllerVue from "src/components/ModelController.vue";
 export default {
   components: {
     TimeBasedChart,
-
+    NonTimeBasedChart,
     ModelControllerVue,
   },
   methods: {

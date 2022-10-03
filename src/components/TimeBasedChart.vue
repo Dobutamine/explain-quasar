@@ -201,7 +201,7 @@
             style="width: 75px; font-size: 10px"
           />
 
-          <q-btn color="black" size="sm" @click="calculate">EXPORT</q-btn>
+          <q-btn color="black" size="sm" @click="exportData">EXPORT</q-btn>
         </div>
       </div>
     </div>
@@ -499,6 +499,7 @@ export default {
       first_run: true,
       lineSeries1: null,
       lineSeries2: null,
+      exportFileName: "data.csv",
     };
   },
   methods: {
@@ -576,7 +577,74 @@ export default {
         this.y3_perbeat = (this.y3_max - this.y3_min).toFixed(4);
       }
     },
-    exportData() {},
+    exportData() {
+      let header = "";
+      let t = new Date().toLocaleString();
+      if (this.chart1_enabled) {
+        header =
+          this.selected_component_name1 +
+          this.selected_prim_prop_name1 +
+          this.selected_sec_prop_name1;
+
+        this.exportFileName = "time_vs_" + header + "_" + t + ".csv";
+        this.writeDataToDisk(this.chartData1, "time," + header);
+      }
+      if (this.chart2_enabled) {
+        header =
+          this.selected_component_name2 +
+          this.selected_prim_prop_name2 +
+          this.selected_sec_prop_name2;
+        this.exportFileName = "time_vs_" + header + "_" + t + ".csv";
+
+        this.writeDataToDisk(this.chartData2, "time," + header);
+      }
+      if (this.chart3_enabled) {
+        header =
+          this.selected_component_name3 +
+          this.selected_prim_prop_name3 +
+          this.selected_sec_prop_name3;
+        this.exportFileName = "time_vs_" + header + "_" + t + ".csv";
+
+        this.writeDataToDisk(this.chartData3, "time," + header);
+      }
+    },
+    writeDataToDisk(data_object, header) {
+      // download to local disk
+      const data_csv = this.jsonToCsv(data_object, header);
+      const blob = new Blob([data_csv], { type: "text/json" });
+      // create an element called a
+      const a = document.createElement("a");
+      a.download = this.exportFileName;
+      a.href = window.URL.createObjectURL(blob);
+      a.dataset.downloadurl = ["text/json", a.download, a.href].join(":");
+      // create a synthetic click MouseEvent
+      let evt = new MouseEvent("click", {
+        bubbles: true,
+        cancelable: true,
+        view: window,
+      });
+      // dispatch the mouse click event
+      a.dispatchEvent(evt);
+      // remove the element from the document
+      a.remove();
+    },
+    jsonToCsv(items, _headerString) {
+      const headerString = _headerString;
+      const rowItems = [];
+      items.forEach((data_row) => {
+        let x = data_row.x;
+        let y = data_row.y;
+
+        let item = x.toString() + ";" + y.toString();
+        rowItems.push(item);
+      });
+
+      //const csv = "";
+      // join header and body, and break into separate lines
+      const csv = [headerString, ...rowItems].join("\r\n");
+
+      return csv;
+    },
 
     autoscaling() {
       if (this.autoscale) {

@@ -25,7 +25,6 @@
         }}</q-btn>
       </div>
     </div>
-    <q-separator class="q-mt-sm" size="2px"></q-separator>
   </div>
 </template>
 
